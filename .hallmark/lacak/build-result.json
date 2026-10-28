@@ -1,0 +1,6 @@
+{
+  "command": "next build .hallmark/lacak/build-check",
+  "status": "passed",
+  "isolated": true,
+  "checks": 36
+}

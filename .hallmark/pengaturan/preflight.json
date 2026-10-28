@@ -1,0 +1,26 @@
+{
+  "scanned": "2026-10-28",
+  "scope": "app",
+  "findings": {
+    "font": "src/app/layout.tsx Plus Jakarta Sans",
+    "palette": "src/app/public-map/tokens.css SIJAGO shared tokens",
+    "reference": "theme-guide, moderation and audit",
+    "requirements": "sijago-docs/PRD.md US-20 and system_config",
+    "backend": "GET/PUT /v1/admin/config; seed canonical keys and ratio type"
+  },
+  "preserve": [
+    "all seven existing config state values",
+    "five existing rendered fields and save capability",
+    "ten navigation destinations",
+    "CONFIG_UPDATED auditing contract"
+  ],
+  "introduce": [
+    "four parameter groups",
+    "explicit units and field help",
+    "two formerly hidden fields",
+    "canonical key and ratio conversion",
+    "dirty/validation/error/success/reference/loading states",
+    "internal navigation guard",
+    "persistent save bar"
+  ]
+}

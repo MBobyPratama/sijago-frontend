@@ -1,0 +1,38 @@
+{
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "app",
+  "shape": "grouped operational settings form",
+  "theme": "brand",
+  "axes": "cool/sans/blue",
+  "hero": "none, app settings",
+  "nav": "shared SIJAGO admin task navigation",
+  "footer": "kept project footer",
+  "imagery": "none required for operational parameters",
+  "photos": [],
+  "entry": "review and update system configuration",
+  "fingerprint": [
+    "group index",
+    "labelled unit inputs",
+    "four parameter groups",
+    "dirty state summary",
+    "persistent save controls"
+  ],
+  "sections": [
+    "context",
+    "duplicates",
+    "AI drafting",
+    "monitoring",
+    "weather",
+    "save summary"
+  ],
+  "signature": "explicit units and pending changes across operational parameters",
+  "waived": [],
+  "prompt": "Redesign /admin/pengaturan following sijago-docs and current theme guide, preserving functions",
+  "verification": {
+    "checks": 37,
+    "api": "mocked, no real configuration writes",
+    "sloplint": "0 FAIL, 0 WARN, brand palette dismissed",
+    "finishReview": "subagent, 2 findings resolved"
+  }
+}

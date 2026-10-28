@@ -1,0 +1,105 @@
+/* Hallmark · shape: app screen · genre: modern-minimal · theme: SIJAGO brand · redesign: full · scope: app · v2.0.0
+ * display: Plus Jakarta Sans · body: Plus Jakarta Sans · nav: shared civic admin task navigation · signature: expandable before-and-after audit records · posture: restrained */
+/* Hallmark · finish-review: subagent · ship · no blocking findings; mobile records preserve every field, raw snapshots and full hashes remain accessible */
+/* Hallmark · pre-emit critique: P4 H4 E4 S5 R5 V4 · weakest: E, validate long identifiers and JSON on narrow screens */
+/* Hallmark · dismissed 74 · existing SIJAGO palette retained from shared project tokens */
+/* Hallmark · reworded "jejak audit permanen & riwayat versi fakta/draf (us-19)" to "Riwayat audit" · shortened to the admin task; all source facts and draft history remain accessible */
+/* Hallmark · reworded "22.59" to "UTC timestamps and expandable full snapshot values" · timestamps now explicitly use UTC; existing snapshot data and hashes remain in entry details rather than truncated cells */
+/* Hallmark · reworded "22.58" to "UTC timestamps and expandable full snapshot values" · timestamps now explicitly use UTC; existing snapshot data and hashes remain in entry details rather than truncated cells */
+/* Hallmark · reworded "4332078506" to "UTC timestamps and expandable full snapshot values" · timestamps now explicitly use UTC; existing snapshot data and hashes remain in entry details rather than truncated cells */
+/* Hallmark · reworded "86221570296" to "UTC timestamps and expandable full snapshot values" · timestamps now explicitly use UTC; existing snapshot data and hashes remain in entry details rather than truncated cells */
+/* Hallmark · reworded "22.57" to "UTC timestamps and expandable full snapshot values" · timestamps now explicitly use UTC; existing snapshot data and hashes remain in entry details rather than truncated cells */
+/* Hallmark · reworded "8051338688" to "UTC timestamps and expandable full snapshot values" · timestamps now explicitly use UTC; existing snapshot data and hashes remain in entry details rather than truncated cells */
+/* Hallmark · reworded "10.54" to "UTC timestamps and expandable full snapshot values" · timestamps now explicitly use UTC; existing snapshot data and hashes remain in entry details rather than truncated cells */
+/* Hallmark · reworded "3777359046-90" to "UTC timestamps and expandable full snapshot values" · timestamps now explicitly use UTC; existing snapshot data and hashes remain in entry details rather than truncated cells */
+/* Hallmark · reworded "10.36" to "UTC timestamps and expandable full snapshot values" · timestamps now explicitly use UTC; existing snapshot data and hashes remain in entry details rather than truncated cells */
+/* Hallmark · reworded "117483851" to "UTC timestamps and expandable full snapshot values" · timestamps now explicitly use UTC; existing snapshot data and hashes remain in entry details rather than truncated cells */
+/* Hallmark · reworded "0000000000000000" to "UTC timestamps and expandable full snapshot values" · timestamps now explicitly use UTC; existing snapshot data and hashes remain in entry details rather than truncated cells */
+@import "../../public-map/tokens.css";
+html, body { overflow-x: clip; }
+.audit-page { font-family: var(--font-body); color: var(--color-ink); background: var(--color-paper); font-size: var(--text-md); line-height: 1.6; padding-block: var(--space-xl) var(--space-2xl); caret-color: var(--color-accent); scrollbar-color: var(--color-muted) var(--color-paper); }
+.audit-page ::selection { background: var(--color-selected); color: var(--color-accent); }
+.audit-container { max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter); }
+.audit-page :is(h1,h2,h3,h4,p,dl,pre) { margin: 0; }
+.audit-page :is(h1,h2,h3,h4) { min-width: 0; overflow-wrap: break-word; text-wrap: balance; font-weight: 700; }
+.audit-page h1 { font-size: 32px; line-height: 1.25; letter-spacing: -.03em; }
+.audit-page h2 { font-size: var(--text-lg); line-height: 1.4; }
+.audit-page :is(h3,h4) { font-size: var(--text-md); }
+.audit-page p { max-width: 60ch; text-wrap: pretty; }
+.audit-page :is(input,select,button,code,pre) { font: inherit; }
+.audit-page :is(button,a,input,select,summary):focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
+.audit-page :is(button,a):active { opacity: .8; }
+.audit-page button:disabled { cursor: not-allowed; opacity: .55; background: var(--color-paper-2); color: var(--color-muted); }
+.audit-page svg { flex-shrink: 0; }
+.audit-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-lg); }
+.audit-heading p { margin-top: var(--space-xs); color: var(--color-muted); }
+.audit-button { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-xs); min-height: 44px; padding: var(--space-xs) var(--space-md); background: var(--color-paper-3); color: var(--color-ink); border: 1px solid var(--color-control-rule); border-radius: var(--radius-control); cursor: pointer; font-size: var(--text-sm) !important; font-weight: 600 !important; white-space: nowrap; }
+.audit-button:hover { background: var(--color-selected); border-color: var(--color-accent); }
+.audit-context { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-md) var(--space-lg); margin-block: var(--space-lg); color: var(--color-muted); font-size: var(--text-sm); }
+.audit-context > span { display: inline-flex; align-items: center; gap: var(--space-xs); }
+.audit-source-live, .audit-source-warning { padding: var(--space-2xs) var(--space-xs); border-radius: var(--radius-control); }
+.audit-source-live { color: var(--color-civic-ink); background: var(--color-civic-paper); }
+.audit-source-warning { color: var(--color-progress-ink); background: var(--color-progress-paper); }
+.audit-notice { display: flex; align-items: flex-start; gap: var(--space-sm); padding: var(--space-md); border-radius: var(--radius-control); margin-bottom: var(--space-lg); font-size: var(--text-sm); overflow-wrap: anywhere; }
+.audit-notice p { flex: 1; }
+.audit-warning { background: var(--color-progress-paper); color: var(--color-progress-ink); }
+.audit-explanation { padding-bottom: var(--space-lg); }
+.audit-explanation summary { min-height: 44px; align-content: center; font-size: var(--text-sm); cursor: pointer; color: var(--color-ink-2); }
+.audit-explanation p { font-size: var(--text-sm); color: var(--color-muted); margin-block: var(--space-sm); }
+.audit-workspace { min-width: 0; border: 1px solid var(--color-rule); border-radius: var(--radius-card); background: var(--color-paper-3); overflow: clip; }
+.audit-list-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-sm); padding: var(--space-lg); border-bottom: 1px solid var(--color-rule); }
+.audit-list-heading span { color: var(--color-muted); font-size: var(--text-sm); font-variant-numeric: tabular-nums; }
+.audit-filters { display: grid; grid-template-columns: minmax(0,1.4fr) repeat(2,minmax(0,1fr)); gap: var(--space-md); padding: var(--space-md) var(--space-lg); border-bottom: 1px solid var(--color-rule); }
+.audit-field { display: grid; gap: var(--space-xs); min-width: 0; }
+.audit-field label { color: var(--color-ink-2); font-size: var(--text-sm); }
+.audit-field :is(input,select) { width: 100%; min-width: 0; min-height: 44px; padding: var(--space-xs) var(--space-sm); border: 1px solid var(--color-control-rule); border-radius: var(--radius-control); background: var(--color-paper-3); color: var(--color-ink); font-size: var(--text-sm); }
+.audit-field :is(input,select):hover { background: var(--color-paper); }
+.audit-field input::placeholder { color: var(--color-muted); }
+.audit-search > div { position: relative; }
+.audit-search svg { position: absolute; top: 14px; left: var(--space-sm); color: var(--color-muted); }
+.audit-search input { padding-left: var(--space-xl); }
+.audit-table { font-variant-numeric: tabular-nums; width: 100%; table-layout: fixed; border-collapse: collapse; text-align: left; font-size: var(--text-sm); }
+.audit-table th { font-variant-numeric: tabular-nums; color: var(--color-muted); background: var(--color-paper); font-size: var(--text-xs); font-weight: 600; }
+.audit-table :is(th,td) { padding: var(--space-md); border-bottom: 1px solid var(--color-rule); vertical-align: top; overflow-wrap: anywhere; }
+.audit-table th:nth-child(1) { width: 18%; }
+.audit-table th:nth-child(2) { width: 25%; }
+.audit-table th:nth-child(3) { width: 20%; }
+.audit-table th:nth-child(4) { width: 22%; }
+.audit-table th:nth-child(5) { width: 15%; }
+.audit-table time { font-variant-numeric: tabular-nums; }
+.audit-table strong { font-weight: 600; }
+.audit-secondary { display: block; color: var(--color-muted); font-size: var(--text-xs) !important; margin-top: var(--space-2xs); overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.audit-report-id { color: var(--color-ink-2); font-variant-numeric: tabular-nums; }
+.audit-detail-toggle { padding-inline: var(--space-sm); font-size: var(--text-xs) !important; }
+.audit-row-selected { background: var(--color-selected); }
+.audit-detail-row[hidden] { display: none; }
+.audit-detail-row > td { padding: 0; }
+.audit-entry-detail { padding: var(--space-lg); background: var(--color-paper); }
+.audit-entry-detail h3 { margin-bottom: var(--space-md); }
+.audit-snapshots { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: var(--space-lg); }
+.audit-snapshots > div { min-width: 0; }
+.audit-snapshots h4 { margin-bottom: var(--space-sm); font-size: var(--text-sm); }
+.audit-snapshots pre { white-space: pre-wrap; overflow-wrap: anywhere; word-break: break-word; padding: var(--space-md); background: var(--color-paper-3); color: var(--color-ink-2); border-radius: var(--radius-control); font-size: var(--text-sm); font-variant-numeric: tabular-nums; max-height: 400px; overflow-y: auto; }
+.audit-hashes { display: grid; gap: var(--space-md); padding-top: var(--space-lg); }
+.audit-hashes dt { color: var(--color-muted); font-size: var(--text-xs); }
+.audit-hashes dd { margin: var(--space-2xs) 0 0; font-size: var(--text-sm); overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.audit-helper { display: block; color: var(--color-muted); font-size: var(--text-xs); margin-top: var(--space-sm) !important; min-height: 1lh; }
+.audit-pagination { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-md); padding: var(--space-md) var(--space-lg); }
+.audit-pagination > span { font-size: var(--text-sm); color: var(--color-muted); font-variant-numeric: tabular-nums; }
+.audit-pagination > div { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+.audit-mobile-label { display: none; }
+.audit-empty, .audit-loading { padding: var(--space-lg); }
+.audit-empty p, .audit-loading p { color: var(--color-muted); font-size: var(--text-sm); margin-block: var(--space-sm) var(--space-md); }
+.audit-loading > span { display: block; height: 64px; background: var(--color-paper-2); margin-bottom: var(--space-md); border-radius: var(--radius-control); }
+.audit-tools { margin-top: var(--space-xl); border-top: 1px solid var(--color-rule); padding-top: var(--space-xl); }
+.audit-tools-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: var(--space-xl); margin-top: var(--space-lg); }
+.audit-tools p { color: var(--color-muted); font-size: var(--text-sm); margin-block: var(--space-sm) var(--space-md); }
+.audit-simulation { margin-top: var(--space-lg); }
+.audit-simulation > div { flex: 1; min-width: 0; }
+.audit-simulation p { margin-block: var(--space-xs) var(--space-md); }
+.audit-simulation code { display: block; overflow-wrap: anywhere; }
+.audit-sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: clip; clip-path: inset(50%); white-space: nowrap; }
+@media (max-width: 1000px) { .audit-filters { grid-template-columns: repeat(2,minmax(0,1fr)); } .audit-search { grid-column: 1 / -1; } .audit-table th:nth-child(1) { width: 19%; } .audit-table th:nth-child(2) { width: 24%; } .audit-table th:nth-child(3) { width: 18%; } .audit-table th:nth-child(4) { width: 21%; } .audit-table th:nth-child(5) { width: 18%; } }
+@media (max-width: 900px) { .audit-table, .audit-table tbody { display: block; } .audit-table thead { position: absolute; width: 1px; height: 1px; overflow: clip; clip-path: inset(50%); } .audit-table tbody > tr:not(.audit-detail-row) { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); padding: var(--space-md); gap: var(--space-md); border-bottom: 1px solid var(--color-rule); } .audit-table td { display: block; border: 0; padding: 0; } .audit-table tbody > tr:not(.audit-detail-row) > td:nth-child(2) { grid-column: 1 / -1; grid-row: 1; } .audit-table tbody > tr:not(.audit-detail-row) > td:last-child { grid-column: 1 / -1; } .audit-mobile-label { display: block; font-size: var(--text-xs); color: var(--color-muted); margin-bottom: var(--space-2xs); } .audit-detail-row { display: block; } .audit-detail-row[hidden] { display: none; } .audit-snapshots, .audit-tools-grid { grid-template-columns: minmax(0,1fr); } .audit-simulation { flex-wrap: wrap; } .audit-simulation > div { flex-basis: 100%; } }
+@media (max-width: 420px) { .audit-container { padding-inline: var(--space-md); } .audit-page { padding-top: var(--space-lg); } .audit-filters { grid-template-columns: minmax(0,1fr); padding: var(--space-md); } .audit-list-heading, .audit-entry-detail, .audit-pagination { padding: var(--space-md); } }
+@media (prefers-reduced-motion: reduce) { .audit-page * { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }

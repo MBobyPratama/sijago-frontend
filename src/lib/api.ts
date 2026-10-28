@@ -13,3 +13,14 @@ export async function apiFetch<T>(
   });
   return res.json();
 }
+
+export function getClientFingerprint(): string {
+  if (typeof window === "undefined") return "server-ssr-fp";
+  const key = "sijago_client_fp";
+  let fp = window.localStorage.getItem(key);
+  if (!fp) {
+    fp = `fp-${Math.random().toString(36).slice(2, 10)}-${Date.now().toString(36)}`;
+    window.localStorage.setItem(key, fp);
+  }
+  return fp;
+}

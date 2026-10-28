@@ -1,0 +1,19 @@
+/* Hallmark · shared accessibility and scoped app foundations */
+html, body { overflow-x: clip; }
+.public-map { font-family: var(--font-body); color: var(--color-ink); background: var(--color-paper); line-height: 1.5; caret-color: var(--color-accent); scrollbar-color: var(--color-muted) var(--color-paper); }
+.public-map *, .public-map *::before, .public-map *::after { box-sizing: border-box; }
+.public-map :focus-visible, body > header :focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; }
+.public-map ::selection { background: var(--color-selected); color: var(--color-accent); }
+.public-map :is(h1,h2,h3) { min-width: 0; overflow-wrap: break-word; text-wrap: balance; }
+.public-map :is(p,h1,h2,h3) { margin: 0; }
+.public-map p { text-wrap: pretty; }
+.public-map :is(button,select,a) { -webkit-tap-highlight-color: transparent; }
+.public-map :is(button,select) { font: inherit; }
+.public-map button { cursor: pointer; }
+.public-map :is(button,a):active { opacity: .8; }
+.public-map button:disabled { opacity: .55; cursor: not-allowed; }
+.public-map a { text-underline-offset: 3px; }
+.pm-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+@media (prefers-reduced-motion: reduce) {
+  .public-map *, .public-map *::before, .public-map *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

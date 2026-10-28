@@ -1,0 +1,166 @@
+[
+  {
+    "name": "Live snapshot source",
+    "pass": true
+  },
+  {
+    "name": "Explicit WIB independent of browser timezone",
+    "pass": true
+  },
+  {
+    "name": "API totals shown",
+    "pass": true
+  },
+  {
+    "name": "Warning respects active flag",
+    "pass": true
+  },
+  {
+    "name": "Map has data driven district points",
+    "pass": true
+  },
+  {
+    "name": "Map values match API",
+    "pass": true
+  },
+  {
+    "name": "Red zone follows API",
+    "pass": true
+  },
+  {
+    "name": "Marker size encodes reports",
+    "pass": true
+  },
+  {
+    "name": "Before map is no fake road markers",
+    "pass": true
+  },
+  {
+    "name": "Map popup uses district data",
+    "pass": true
+  },
+  {
+    "name": "No overflow 320",
+    "pass": true
+  },
+  {
+    "name": "No overflow 375",
+    "pass": true
+  },
+  {
+    "name": "Mobile markers clear edges and attribution",
+    "pass": true
+  },
+  {
+    "name": "No overflow 768",
+    "pass": true
+  },
+  {
+    "name": "No overflow 1024",
+    "pass": true
+  },
+  {
+    "name": "No overflow 1440",
+    "pass": true
+  },
+  {
+    "name": "No overflow 1920",
+    "pass": true
+  },
+  {
+    "name": "District filters chart",
+    "pass": true
+  },
+  {
+    "name": "District filters KPI",
+    "pass": true
+  },
+  {
+    "name": "District filters map",
+    "pass": true
+  },
+  {
+    "name": "No red recommendation state",
+    "pass": true
+  },
+  {
+    "name": "Period limitation explicit",
+    "pass": true
+  },
+  {
+    "name": "Period does not invent new numbers",
+    "pass": true
+  },
+  {
+    "name": "Both metric scales correct",
+    "pass": true
+  },
+  {
+    "name": "Stale simulation explicit",
+    "pass": true
+  },
+  {
+    "name": "Stale simulation preserves timestamp",
+    "pass": true
+  },
+  {
+    "name": "Sync error shown",
+    "pass": true
+  },
+  {
+    "name": "Sync failure retains KPI",
+    "pass": true
+  },
+  {
+    "name": "Sync failure marks stale",
+    "pass": true
+  },
+  {
+    "name": "Sync uses real endpoint",
+    "pass": true
+  },
+  {
+    "name": "Server CSV destination preserved",
+    "pass": true
+  },
+  {
+    "name": "Mandatory disclaimer retained",
+    "pass": true
+  },
+  {
+    "name": "Empty source no sample data",
+    "pass": true
+  },
+  {
+    "name": "Inactive warning hidden",
+    "pass": true
+  },
+  {
+    "name": "Offline labelled example",
+    "pass": true
+  },
+  {
+    "name": "No invented sync time",
+    "pass": true
+  },
+  {
+    "name": "Fallback CSV preserved",
+    "pass": true
+  },
+  {
+    "name": "Map failure leaves chart",
+    "pass": true
+  },
+  {
+    "name": "Map failure explained",
+    "pass": true
+  },
+  {
+    "name": "Controls labelled",
+    "pass": true
+  },
+  {
+    "name": "Agency navigation active",
+    "pass": true
+  }
+]

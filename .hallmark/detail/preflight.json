@@ -1,0 +1,23 @@
+{
+  "scanned": "2026-10-28",
+  "scope": "app",
+  "findings": {
+    "font": "src/app/layout.tsx: Plus Jakarta Sans",
+    "palette": "src/app/public-map/tokens.css: SIJAGO tokens",
+    "framework": "package.json: Next.js 15, React 19",
+    "requirements": "sijago-docs/PRD.md FR-4.3 through FR-4.6 and FR-10.1 through FR-10.6"
+  },
+  "preserve": [
+    "existing report data and handlers",
+    "brand tokens",
+    "map component",
+    "shared footer"
+  ],
+  "introduce": [
+    "report hierarchy",
+    "scoped CSS",
+    "real API photo rendering",
+    "OTP keyboard focus management"
+  ],
+  "before": "Static inventory saved; before screenshots unavailable due browser launch failure."
+}

@@ -5,3 +5,28 @@
 body {
   @apply bg-slate-50 text-slate-900 antialiased;
 }
+
+/* Editorial footer: existing typeface and Tailwind color utilities are inherited. */
+.site-footer { padding-block: clamp(3rem, 6vw, 6rem); text-align: left; }
+.site-footer-container { width: 100%; max-width: 1280px; margin-inline: auto; padding-inline: clamp(1rem, 4.5vw, 5rem); }
+.site-footer-brand { margin: 0; min-width: 0; font-size: clamp(2.5rem, 11.5vw, 10rem); font-weight: 700; line-height: 1; letter-spacing: -.065em; overflow-wrap: break-word; }
+.site-footer-divider { margin-block: clamp(1.5rem, 3vw, 3rem) clamp(1.5rem, 3.5vw, 3.5rem); border-top-width: 1px; }
+.site-footer-information { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 4rem); align-items: start; font-size: .875rem; line-height: 1.75; }
+.site-footer-description { max-width: 48ch; margin: 0; text-wrap: pretty; }
+.site-footer-navigation { display: flex; justify-content: flex-end; align-items: baseline; flex-wrap: wrap; gap: 1rem clamp(1rem, 2.5vw, 2.5rem); }
+.site-footer-navigation a { color: inherit; text-decoration: underline; text-underline-offset: .25em; white-space: nowrap; }
+.site-footer-navigation a:hover { text-decoration-thickness: 2px; }
+.site-footer-navigation a:focus-visible { outline: 2px solid currentColor; outline-offset: 5px; }
+.site-footer-bottom { display: flex; flex-direction: column; align-items: flex-start; gap: .75rem; margin-top: clamp(3rem, 6vw, 6rem); font-size: .75rem; line-height: 1.75; }
+.site-footer-bottom p { margin: 0; max-width: 100ch; text-wrap: pretty; }
+@media (max-width: 760px) {
+  .site-footer-information { grid-template-columns: minmax(0, 1fr); }
+  .site-footer-navigation { justify-content: flex-start; }
+}
+@media (max-width: 480px) {
+  .site-footer-navigation { flex-direction: column; align-items: flex-start; gap: .25rem; }
+  .site-footer-navigation a { display: inline-flex; align-items: center; min-height: 44px; }
+}
+
+.site-footer-brand-row { display: flex; align-items: center; gap: clamp(1rem, 2.5vw, 2.5rem); }
+.site-footer-logo { width: clamp(2.5rem, 9vw, 8rem); height: auto; flex-shrink: 0; }

@@ -1,0 +1,83 @@
+/* Hallmark · shape: app screen · genre: modern-minimal · theme: SIJAGO brand · redesign: full · scope: app · v2.0.0
+ * display: Plus Jakarta Sans · body: Plus Jakarta Sans · nav: shared civic admin task navigation · signature: grouped parameters with explicit units and unsaved changes · posture: restrained */
+/* Hallmark · finish-review: subagent · 2 findings · guarded internal navigation and reduced spacing with persistent save controls */
+/* Hallmark · pre-emit critique: P4 H4 E4 S5 R5 V4 · weakest: E, verify field units, validation and save state at mobile widths */
+/* Hallmark · dismissed 74 · existing SIJAGO design tokens retained from theme guide */
+/* Hallmark · dropped onChange={(e) => setConfigs({ ...configs, aiTimeoutMs: e.target.value })} · same configuration editing and save actions now use schema-driven updateConfig and form submission, preserving all fields and handleSave with validation */
+/* Hallmark · dropped onChange={(e) => setConfigs({ ...configs, duplicateRadiusMeters: e.target.value }) } · same configuration editing and save actions now use schema-driven updateConfig and form submission, preserving all fields and handleSave with validation */
+/* Hallmark · dropped onChange={(e) => setConfigs({ ...configs, redZoneRainfallThresholdMm: e.target.value }) } · same configuration editing and save actions now use schema-driven updateConfig and form submission, preserving all fields and handleSave with validation */
+/* Hallmark · dropped onChange={(e) => setConfigs({ ...configs, signoffMonitoringDays: e.target.value }) } · same configuration editing and save actions now use schema-driven updateConfig and form submission, preserving all fields and handleSave with validation */
+/* Hallmark · dropped onChange={(e) => setConfigs({ ...configs, signoffReopenMinVotes: e.target.value }) } · same configuration editing and save actions now use schema-driven updateConfig and form submission, preserving all fields and handleSave with validation */
+/* Hallmark · dropped onClick={handleSave} · same configuration editing and save actions now use schema-driven updateConfig and form submission, preserving all fields and handleSave with validation */
+/* Hallmark · reworded "pengaturan parameter & ambang batas sistem (`system_config`)" to "Pengaturan sistem" · heading names the task, technical table and keys remain documented beside fields */
+@import "../../public-map/tokens.css";
+html, body { overflow-x: clip; }
+.settings-page { font-family: var(--font-body); background: var(--color-paper); color: var(--color-ink); font-size: var(--text-md); line-height: 1.6; padding-block: var(--space-xl) var(--space-2xl); caret-color: var(--color-accent); scrollbar-color: var(--color-muted) var(--color-paper); }
+.settings-page ::selection { background: var(--color-selected); color: var(--color-accent); }
+.settings-container { max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter); }
+.settings-page :is(h1,h2,p) { margin: 0; }
+.settings-page :is(h1,h2) { min-width: 0; overflow-wrap: break-word; text-wrap: balance; font-weight: 700; }
+.settings-page h1 { font-size: 32px; line-height: 1.25; letter-spacing: -.03em; }
+.settings-page h2 { font-size: var(--text-lg); line-height: 1.4; }
+.settings-page p { max-width: 60ch; text-wrap: pretty; }
+.settings-page :is(input,button,code) { font: inherit; }
+.settings-page :is(a,input,button,summary):focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
+.settings-page :is(button,a):active { opacity: .8; }
+.settings-page :is(button,input):disabled { opacity: .55; cursor: not-allowed; background: var(--color-paper-2); color: var(--color-muted); }
+.settings-page svg { flex-shrink: 0; }
+.settings-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-lg); }
+.settings-heading p { color: var(--color-muted); margin-top: var(--space-xs); }
+.settings-button { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-xs); min-height: 44px; padding: var(--space-xs) var(--space-md); border: 1px solid var(--color-control-rule); border-radius: var(--radius-control); background: var(--color-paper-3); color: var(--color-ink); cursor: pointer; font-size: var(--text-sm) !important; font-weight: 600 !important; white-space: nowrap; }
+.settings-button:hover { background: var(--color-selected); border-color: var(--color-accent); }
+.settings-primary { background: var(--color-accent); color: var(--color-accent-ink); border-color: var(--color-accent); }
+.settings-primary:hover { background: var(--color-accent-hover); }
+.settings-context { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-sm) var(--space-lg); margin-block: var(--space-lg); color: var(--color-muted); font-size: var(--text-sm); }
+.settings-context > span { display: inline-flex; align-items: center; gap: var(--space-xs); }
+.settings-context a { min-height: 44px; display: inline-flex; align-items: center; color: var(--color-accent); text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
+.settings-context a:hover { color: var(--color-accent-hover); }
+.settings-source-live, .settings-source-warning { padding: var(--space-2xs) var(--space-xs); border-radius: var(--radius-control); }
+.settings-source-live { background: var(--color-civic-paper); color: var(--color-civic-ink); }
+.settings-source-warning { background: var(--color-progress-paper); color: var(--color-progress-ink); }
+.settings-notice { display: flex; align-items: flex-start; gap: var(--space-sm); padding: var(--space-md); border-radius: var(--radius-control); margin-bottom: var(--space-lg); font-size: var(--text-sm); }
+.settings-warning { background: var(--color-progress-paper); color: var(--color-progress-ink); }
+.settings-success { background: var(--color-civic-paper); color: var(--color-civic-ink); }
+.settings-missing-note { color: var(--color-muted); font-size: var(--text-sm); margin-bottom: var(--space-lg) !important; }
+.settings-layout { display: grid; grid-template-columns: 240px minmax(0,1fr); align-items: start; gap: var(--space-xl); border-top: 1px solid var(--color-rule); }
+.settings-index { position: sticky; top: var(--space-lg); padding-top: var(--space-xl); min-width: 0; }
+.settings-index nav { display: grid; gap: var(--space-2xs); }
+.settings-index nav a { min-height: 44px; display: flex; align-items: center; color: var(--color-ink-2); font-size: var(--text-sm); border-radius: var(--radius-control); padding: var(--space-xs) var(--space-sm); }
+.settings-index nav a:hover { background: var(--color-selected); color: var(--color-accent); }
+.settings-index > p { margin: var(--space-lg) var(--space-sm); font-size: var(--text-sm); color: var(--color-muted); }
+.settings-index details { padding-inline: var(--space-sm); font-size: var(--text-sm); color: var(--color-muted); }
+.settings-index summary { min-height: 44px; cursor: pointer; align-content: center; }
+.settings-index details p { margin-top: var(--space-xs); }
+.settings-form { min-width: 0; }
+.settings-section { scroll-margin-top: var(--space-lg); padding-block: var(--space-lg); border-bottom: 1px solid var(--color-rule); }
+.settings-section-heading { margin-bottom: var(--space-md); }
+.settings-section-heading p { color: var(--color-muted); font-size: var(--text-sm); margin-top: var(--space-xs); }
+.settings-fields { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: var(--space-lg); }
+.settings-field { min-width: 0; }
+.settings-label { display: flex; flex-wrap: wrap; gap: var(--space-xs); align-items: baseline; margin-bottom: var(--space-xs); }
+.settings-label label { font-size: var(--text-sm); font-weight: 600; }
+.settings-label span { font-size: var(--text-xs); color: var(--color-progress-ink); }
+.settings-input-wrap { display: flex; align-items: center; border: 1px solid var(--color-control-rule); border-radius: var(--radius-control); background: var(--color-paper-3); overflow: clip; }
+.settings-input-wrap:focus-within { outline: 3px solid var(--color-focus); outline-offset: 3px; }
+.settings-input-wrap input { width: 100%; min-width: 0; min-height: 44px; padding: var(--space-xs) var(--space-sm); border: 0; color: var(--color-ink); background: var(--color-paper-3); font-variant-numeric: tabular-nums; }
+.settings-input-wrap input:focus-visible { outline-offset: -3px; }
+.settings-input-wrap input:hover { background: var(--color-paper); }
+.settings-input-wrap > span { padding-inline: var(--space-sm); color: var(--color-muted); font-size: var(--text-sm); white-space: nowrap; }
+.settings-input-wrap:has([aria-invalid=true]) { border-color: var(--color-reopened-ink); }
+.settings-help { font-size: var(--text-sm); color: var(--color-muted); margin-top: var(--space-sm) !important; }
+.settings-key { display: block; font-size: var(--text-xs) !important; color: var(--color-muted); overflow-wrap: anywhere; margin-top: var(--space-xs); }
+.settings-field-error { min-height: 1lh; font-size: var(--text-sm); color: var(--color-reopened-ink); margin-top: var(--space-xs) !important; }
+.settings-save-bar { position: sticky; bottom: 0; z-index: 10; background: var(--color-paper); border-top: 1px solid var(--color-rule); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-lg); padding-block: var(--space-lg); }
+.settings-save-bar strong { font-size: var(--text-sm); font-weight: 600; font-variant-numeric: tabular-nums; }
+.settings-save-bar p { font-size: var(--text-xs); color: var(--color-muted); margin-top: var(--space-2xs); }
+.settings-save-actions { display: flex; flex-wrap: wrap; gap: var(--space-sm); }
+.settings-loading { padding-block: var(--space-xl); }
+.settings-loading > span { display: block; height: 96px; background: var(--color-paper-2); border-radius: var(--radius-control); margin-bottom: var(--space-lg); }
+.settings-loading p { color: var(--color-muted); font-size: var(--text-sm); }
+@media (max-width: 1000px) { .settings-layout { grid-template-columns: 200px minmax(0,1fr); gap: var(--space-lg); } .settings-fields { grid-template-columns: minmax(0,1fr); } }
+@media (max-width: 760px) { .settings-layout { grid-template-columns: minmax(0,1fr); gap: 0; } .settings-index { position: static; padding-top: var(--space-lg); } .settings-index nav { display: flex; flex-wrap: wrap; gap: var(--space-xs); } .settings-index nav a { border: 1px solid var(--color-rule); padding-inline: var(--space-sm); } .settings-index > p { margin-inline: 0; } .settings-index details { padding-inline: 0; } .settings-section { padding-block: var(--space-lg); } }
+@media (max-width: 420px) { .settings-container { padding-inline: var(--space-md); } .settings-page { padding-top: var(--space-lg); } .settings-save-actions { flex-direction: column; width: 100%; } }
+@media (prefers-reduced-motion: reduce) { .settings-page * { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }

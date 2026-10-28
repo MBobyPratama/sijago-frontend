@@ -1,0 +1,122 @@
+[
+  {
+    "name": "Verified public reports are rendered",
+    "pass": true
+  },
+  {
+    "name": "Draft source labels remain visible",
+    "pass": true
+  },
+  {
+    "name": "Primary report action keeps /lapor destination",
+    "pass": true
+  },
+  {
+    "name": "Status filter updates the list and marker count",
+    "pass": true
+  },
+  {
+    "name": "Empty state is visible",
+    "pass": true
+  },
+  {
+    "name": "Reset restores district, category, and status",
+    "pass": true
+  },
+  {
+    "name": "Summary disclosure retains report text",
+    "pass": true
+  },
+  {
+    "name": "Support increases once",
+    "pass": true
+  },
+  {
+    "name": "Support can be cancelled",
+    "pass": true
+  },
+  {
+    "name": "List selection opens map popup",
+    "pass": true
+  },
+  {
+    "name": "Popup detail link is retained",
+    "pass": true
+  },
+  {
+    "name": "Map reset clears selected report",
+    "pass": true
+  },
+  {
+    "name": "No horizontal overflow at 320px",
+    "pass": true
+  },
+  {
+    "name": "All report markers fit at 320px",
+    "pass": true
+  },
+  {
+    "name": "Filters fit at 320px",
+    "pass": true
+  },
+  {
+    "name": "No horizontal overflow at 375px",
+    "pass": true
+  },
+  {
+    "name": "All report markers fit at 375px",
+    "pass": true
+  },
+  {
+    "name": "Filters fit at 375px",
+    "pass": true
+  },
+  {
+    "name": "No horizontal overflow at 768px",
+    "pass": true
+  },
+  {
+    "name": "All report markers fit at 768px",
+    "pass": true
+  },
+  {
+    "name": "Filters fit at 768px",
+    "pass": true
+  },
+  {
+    "name": "No horizontal overflow at 1280px",
+    "pass": true
+  },
+  {
+    "name": "All report markers fit at 1280px",
+    "pass": true
+  },
+  {
+    "name": "Filters fit at 1280px",
+    "pass": true
+  },
+  {
+    "name": "No horizontal overflow at 1920px",
+    "pass": true
+  },
+  {
+    "name": "All report markers fit at 1920px",
+    "pass": true
+  },
+  {
+    "name": "Filters fit at 1920px",
+    "pass": true
+  },
+  {
+    "name": "Phone map action brings map into view",
+    "pass": true
+  },
+  {
+    "name": "Phone map receives focus",
+    "pass": true
+  },
+  {
+    "name": "Fresh phone load fits every report marker",
+    "pass": true
+  }
+]

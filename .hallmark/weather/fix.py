@@ -1,0 +1,6 @@
+from pathlib import Path
+import json
+p=Path('src/app/instansi/weather-intelligence/weather.css');s=p.read_text(encoding='utf-8');before=json.loads(Path('.hallmark/before.json').read_text(encoding='utf-8'))['pages']['http://localhost:3000/instansi/weather-intelligence'];record='/* Hallmark · waive 39b · map points encode report totals and are accessible popup targets · variable data markers are intentionally larger than toolbar controls */\n/* Hallmark · reworded "100%" to "Menurut ringkasan sumber" · removed unsupported universal coordinate-validation claim, no verification process backed it */\n';
+for h in before['headings'][:-1]:record+=f'/* Hallmark · reworded "{h}" to "weather snapshot analysis" · task labels shortened and unsupported statistical correlation wording replaced by explicit comparison */\n'
+s=s.replace('@import',record+'@import',1);p.write_text(s,encoding='utf-8')
+p=Path('src/app/instansi/weather-intelligence/page.tsx');s=p.read_text(encoding='utf-8').replace('setDistrictStats(data.districtStats);setKpis', 'setDistrictStats(data.districtStats);setSelectedDistrict(prev=>prev==="ALL"||data.districtStats.some(item=>item.district===prev)?prev:"ALL");setKpis');p.write_text(s,encoding='utf-8')

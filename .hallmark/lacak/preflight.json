@@ -1,0 +1,29 @@
+{
+  "scanned": "2026-10-28",
+  "route": "/lacak",
+  "scope": "app",
+  "findings": {
+    "font": "Plus Jakarta Sans, src/app/layout.tsx",
+    "palette": "src/app/public-map/tokens.css",
+    "requirements": "../sijago-docs/PRD.md F8",
+    "framework": "Next.js App Router + TypeScript"
+  },
+  "preserve": [
+    "lookup endpoint",
+    "kode query parameter",
+    "13 links",
+    "1 search field",
+    "2 original handlers",
+    "all sample tickets",
+    "document and details destinations"
+  ],
+  "introduce": [
+    "semantic ticket form",
+    "explicit not-found and error states",
+    "cancellation of stale lookup results",
+    "honest exact-code demo fallback",
+    "vertical timeline",
+    "evidence from existing API photos",
+    "consistent resident navbar"
+  ]
+}

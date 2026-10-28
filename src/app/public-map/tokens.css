@@ -1,0 +1,20 @@
+/* Hallmark · SIJAGO brand tokens from tailwind.config.ts and UI_UX_GUIDE.md */
+:root {
+  --space-3xs: 2px; --space-2xs: 4px; --space-xs: 8px; --space-sm: 12px; --space-md: 16px; --space-lg: 24px; --space-xl: 40px; --space-2xl: 64px;
+  --text-xs: .75rem; --text-sm: .875rem; --text-md: 1rem; --text-lg: 1.2rem; --text-xl: 1.44rem; --text-2xl: 1.728rem;
+  --color-paper: #f5f7fa; --color-paper-2: #eef3f8; --color-paper-3: #ffffff;
+  --color-ink: #172c43; --color-ink-2: #354d65; --color-muted: #52667b;
+  --color-rule: #d6dfe8; --color-control-rule: #7d8c9c;
+  --color-accent: #1E40AF; --color-accent-hover: #19378f; --color-accent-ink: #ffffff; --color-focus: #1E40AF;
+  --color-civic: #059669; --color-civic-ink: #047450; --color-civic-paper: #e8f5ee;
+  --color-ai: #4F46E5; --color-ai-ink: #4338ca; --color-ai-paper: #eeedfd;
+  --color-selected: #edf3ff;
+  --color-verified: #2563EB; --color-forwarded: #7C3AED; --color-progress: #EA580C;
+  --color-complete: #16A34A; --color-reopened: #DC2626; --color-reopened-ink: #b72020; --color-closed: #64748B;
+  --color-progress-ink: #9a410d; --color-progress-paper: #fff2e4; --color-reopened-paper: #fceeed;
+  --font-display: var(--font-plus-jakarta-sans), sans-serif; --font-body: var(--font-display);
+  --radius-card: 16px; --radius-control: 8px; --radius-pill: 999px;
+  --container: 1280px; --gutter: 24px; --gap-columns: 24px;
+  --dur-micro: 120ms; --dur-short: 220ms; --ease-out: cubic-bezier(.16,1,.3,1);
+  --shadow-map-control: 0 2px 8px #172c431a;
+}

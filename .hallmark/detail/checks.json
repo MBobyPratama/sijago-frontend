@@ -1,0 +1,98 @@
+[
+  {
+    "name": "Report fetched",
+    "pass": true
+  },
+  {
+    "name": "No duplicate v1 prefix",
+    "pass": true
+  },
+  {
+    "name": "No overflow 320",
+    "pass": true
+  },
+  {
+    "name": "No overflow 375",
+    "pass": true
+  },
+  {
+    "name": "No overflow 768",
+    "pass": true
+  },
+  {
+    "name": "No overflow 1440",
+    "pass": true
+  },
+  {
+    "name": "No overflow 1920",
+    "pass": true
+  },
+  {
+    "name": "Upvote count updated",
+    "pass": true
+  },
+  {
+    "name": "OTP dialog opens",
+    "pass": true
+  },
+  {
+    "name": "OTP request endpoint",
+    "pass": true
+  },
+  {
+    "name": "Dev OTP populated",
+    "pass": true
+  },
+  {
+    "name": "OTP dialog closes",
+    "pass": true
+  },
+  {
+    "name": "Verification success",
+    "pass": true
+  },
+  {
+    "name": "Tag count updates",
+    "pass": true
+  },
+  {
+    "name": "Reopened status",
+    "pass": true
+  },
+  {
+    "name": "Reopened alert",
+    "pass": true
+  },
+  {
+    "name": "Signoff body retained",
+    "pass": true
+  },
+  {
+    "name": "Map retained",
+    "pass": true
+  },
+  {
+    "name": "Missing photos honest",
+    "pass": true
+  },
+  {
+    "name": "Label retained",
+    "pass": true
+  },
+  {
+    "name": "All fields labelled",
+    "pass": true
+  },
+  {
+    "name": "Modal focus trapped",
+    "pass": true
+  },
+  {
+    "name": "Escape closes dialog",
+    "pass": true
+  },
+  {
+    "name": "Focus restored",
+    "pass": true
+  }
+]

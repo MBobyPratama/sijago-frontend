@@ -1,0 +1,146 @@
+[
+  {
+    "name": "URL kode initializes lookup",
+    "pass": true
+  },
+  {
+    "name": "Server data is labeled",
+    "pass": true
+  },
+  {
+    "name": "Timeline has four core stages",
+    "pass": true
+  },
+  {
+    "name": "Processing report has three completed stages",
+    "pass": true
+  },
+  {
+    "name": "Dates use WIB",
+    "pass": true
+  },
+  {
+    "name": "PDF destination retained",
+    "pass": true
+  },
+  {
+    "name": "Detail destination retained",
+    "pass": true
+  },
+  {
+    "name": "No horizontal overflow at 320px",
+    "pass": true
+  },
+  {
+    "name": "Actions precede timeline at 320px",
+    "pass": true
+  },
+  {
+    "name": "No horizontal overflow at 375px",
+    "pass": true
+  },
+  {
+    "name": "Actions precede timeline at 375px",
+    "pass": true
+  },
+  {
+    "name": "No horizontal overflow at 768px",
+    "pass": true
+  },
+  {
+    "name": "Actions precede timeline at 768px",
+    "pass": true
+  },
+  {
+    "name": "No horizontal overflow at 1440px",
+    "pass": true
+  },
+  {
+    "name": "Actions precede timeline at 1440px",
+    "pass": true
+  },
+  {
+    "name": "No horizontal overflow at 1920px",
+    "pass": true
+  },
+  {
+    "name": "Actions precede timeline at 1920px",
+    "pass": true
+  },
+  {
+    "name": "Empty input clears stale report",
+    "pass": true
+  },
+  {
+    "name": "Unknown ticket does not show unrelated sample",
+    "pass": true
+  },
+  {
+    "name": "Offline shows error and retry",
+    "pass": true
+  },
+  {
+    "name": "Server errors are distinct from not-found",
+    "pass": true
+  },
+  {
+    "name": "Missing agency never borrows demo agency",
+    "pass": true
+  },
+  {
+    "name": "Missing live draft never borrows demo title",
+    "pass": true
+  },
+  {
+    "name": "Waiting report has one complete stage",
+    "pass": true
+  },
+  {
+    "name": "Rejection reason displayed",
+    "pass": true
+  },
+  {
+    "name": "Stopped stages do not promise further progress",
+    "pass": true
+  },
+  {
+    "name": "Rejected report does not appear verified",
+    "pass": true
+  },
+  {
+    "name": "Duplicate status supported",
+    "pass": true
+  },
+  {
+    "name": "Reopened stage is visible",
+    "pass": true
+  },
+  {
+    "name": "Closed stage is visible",
+    "pass": true
+  },
+  {
+    "name": "Before and after evidence from API is rendered",
+    "pass": true
+  },
+  {
+    "name": "All sample ticket controls retained",
+    "pass": true
+  },
+  {
+    "name": "Exact sample fallback is explicitly labeled",
+    "pass": true
+  },
+  {
+    "name": "Original draft source label preserved",
+    "pass": true
+  },
+  {
+    "name": "Loading state clears prior results",
+    "pass": true
+  },
+  {
+    "name": "Stale responses cannot replace latest lookup",
+    "pass": true
+  }
+]

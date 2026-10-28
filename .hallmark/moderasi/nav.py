@@ -1,0 +1,8 @@
+from pathlib import Path
+p=Path('src/components/layout/DemoNavbar.tsx');s=p.read_text(encoding='utf-8');needle='  if (pathname === "/"';pos=s.index(needle);s=s[:pos]+'''  if (pathname === "/admin/moderasi") {
+    const adminLinks = [{href:"/admin/moderasi",label:"Moderasi"},{href:"/admin/audit",label:"Audit log"},{href:"/admin/pengaturan",label:"Pengaturan"}];
+    const otherLinks = [{href:"/",label:"Peta publik"},{href:"/lapor",label:"Lapor jalan rusak"},{href:"/lacak",label:"Lacak laporan"},{href:"/laporan/SJG-2026-1042",label:"Contoh detail laporan"},{href:"/instansi/laporan",label:"Portal instansi"},{href:"/instansi/weather-intelligence",label:"Weather-Road Intel"},{href:"/theme-guide",label:"Panduan desain"}];
+    return <header className="mod-app-header"><div className="mod-header-container"><Link href="/" aria-label="SIJAGO, beranda" className="mod-header-logo"><Image src="/images/logo_header.svg" alt="SIJAGO, Sistem Jalan Bogor" width={190} height={66} priority /></Link><nav aria-label="Navigasi admin" className="mod-header-nav">{adminLinks.map(item=><Link key={item.href} href={item.href} aria-current={pathname===item.href?"page":undefined} className="mod-desktop-link">{item.label}</Link>)}<details className="mod-header-menu"><summary>Menu</summary><div>{adminLinks.map(item=><Link key={item.href} href={item.href} aria-current={pathname===item.href?"page":undefined} className="mod-mobile-link">{item.label}</Link>)}{otherLinks.map(item=><Link key={item.href} href={item.href}>{item.label}</Link>)}</div></details></nav></div></header>;
+  }
+
+'''+s[pos:];p.write_text(s,encoding='utf-8')

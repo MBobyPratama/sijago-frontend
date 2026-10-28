@@ -1,0 +1,158 @@
+[
+  {
+    "name": "Live queue loaded",
+    "pass": true
+  },
+  {
+    "name": "Priority sort",
+    "pass": true
+  },
+  {
+    "name": "Waiting report selected",
+    "pass": true
+  },
+  {
+    "name": "EXIF warning retained",
+    "pass": true
+  },
+  {
+    "name": "No overflow 320",
+    "pass": true
+  },
+  {
+    "name": "No overflow 375",
+    "pass": true
+  },
+  {
+    "name": "No overflow 768",
+    "pass": true
+  },
+  {
+    "name": "No overflow 1024",
+    "pass": true
+  },
+  {
+    "name": "No overflow 1440",
+    "pass": true
+  },
+  {
+    "name": "No overflow 1920",
+    "pass": true
+  },
+  {
+    "name": "Search empty state",
+    "pass": true
+  },
+  {
+    "name": "Reset filter",
+    "pass": true
+  },
+  {
+    "name": "Status filter",
+    "pass": true
+  },
+  {
+    "name": "Notes reset on selection",
+    "pass": true
+  },
+  {
+    "name": "Verify error visible",
+    "pass": true
+  },
+  {
+    "name": "Failed verify preserves status",
+    "pass": true
+  },
+  {
+    "name": "Verify succeeds",
+    "pass": true
+  },
+  {
+    "name": "Verify payload",
+    "pass": true
+  },
+  {
+    "name": "Blur confirmed by server",
+    "pass": true
+  },
+  {
+    "name": "Preview does not send",
+    "pass": true
+  },
+  {
+    "name": "Recipient in preview",
+    "pass": true
+  },
+  {
+    "name": "Modal focus trapped",
+    "pass": true
+  },
+  {
+    "name": "Modal Escape closes",
+    "pass": true
+  },
+  {
+    "name": "Preview focus restored",
+    "pass": true
+  },
+  {
+    "name": "Send failure keeps dialog",
+    "pass": true
+  },
+  {
+    "name": "Send failure preserves status",
+    "pass": true
+  },
+  {
+    "name": "Confirmed send endpoint and agency",
+    "pass": true
+  },
+  {
+    "name": "Selecting reason does not reject",
+    "pass": true
+  },
+  {
+    "name": "Reject payload",
+    "pass": true
+  },
+  {
+    "name": "Merge payload",
+    "pass": true
+  },
+  {
+    "name": "Empty queue no sample report",
+    "pass": true
+  },
+  {
+    "name": "Refresh failure retains live provenance",
+    "pass": true
+  },
+  {
+    "name": "Offline fallback explicitly labelled",
+    "pass": true
+  },
+  {
+    "name": "Sample cannot report false success",
+    "pass": true
+  },
+  {
+    "name": "All fields have visible labels",
+    "pass": true
+  },
+  {
+    "name": "No double v1 API path",
+    "pass": true
+  },
+  {
+    "name": "Mobile selection focuses inspection",
+    "pass": true
+  },
+  {
+    "name": "Mobile selection scrolls inspection into view",
+    "pass": true
+  },
+  {
+    "name": "Mobile return to queue available",
+    "pass": true
+  }
+]

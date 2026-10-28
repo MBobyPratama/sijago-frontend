@@ -1,0 +1,31 @@
+{
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "app",
+  "shape": "report record with evidence and community actions",
+  "theme": "brand",
+  "axes": "cool/sans/blue",
+  "hero": "none, app screen",
+  "nav": "SIJAGO resident navigation",
+  "footer": "kept project footer",
+  "imagery": "API report BEFORE, REPORT, AFTER photos only",
+  "photos": [],
+  "entry": "read and participate in a public road report",
+  "fingerprint": [
+    "report identity",
+    "left narrative evidence and community",
+    "right facts and map",
+    "OTP modal"
+  ],
+  "sections": [
+    "report identity",
+    "description and support",
+    "evidence",
+    "condition tags",
+    "community signoff",
+    "facts and location"
+  ],
+  "signature": "public road report evidence and resident participation",
+  "waived": [],
+  "prompt": "Redesign report detail following sijago-docs, retaining Plus Jakarta Sans, SIJAGO colors and functions"
+}

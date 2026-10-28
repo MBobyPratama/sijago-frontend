@@ -1,0 +1,2 @@
+from pathlib import Path
+p=Path('.hallmark/verify-moderasi.mjs');s=p.read_text(encoding='utf-8');s=s.replace("await page.waitForFunction(()=>document.querySelector('.mod-detail-meta').textContent.includes('Terverifikasi'));", "await pause(1000);console.log('DEBUG',mutations,rows,await page.$eval('.mod-inspection',e=>e.textContent));await page.waitForFunction(()=>document.querySelector('.mod-detail-meta').textContent.includes('Terverifikasi'));",1);p.write_text(s,encoding='utf-8')

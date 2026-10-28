@@ -1,0 +1,36 @@
+{
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "app",
+  "shape": "indexed living component reference",
+  "theme": "brand",
+  "axes": "cool/sans/blue",
+  "hero": "none, reference app screen",
+  "nav": "SIJAGO resident shell plus local index",
+  "footer": "kept editorial project footer",
+  "imagery": "existing SIJAGO header logo",
+  "photos": [],
+  "entry": "reference resident UI tokens and patterns",
+  "fingerprint": [
+    "local category index",
+    "open swatch catalog",
+    "typographic specimens",
+    "interactive local form states",
+    "governance copy",
+    "route directory"
+  ],
+  "sections": [
+    "colors and status",
+    "typography and layout",
+    "resident components",
+    "governance",
+    "directory"
+  ],
+  "signature": "actual resident tokens and interactive state specimens",
+  "waived": [],
+  "prompt": "Update theme guide to match newly redesigned resident pages",
+  "verification": {
+    "browserChecks": 28,
+    "requests": "clipboard mocked, local component state only"
+  }
+}

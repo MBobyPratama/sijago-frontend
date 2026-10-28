@@ -1,0 +1,43 @@
+{
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "app",
+  "shape": "moderation queue and evidence workbench",
+  "theme": "brand",
+  "axes": "cool/sans/blue",
+  "hero": "none, admin app screen",
+  "nav": "SIJAGO admin task navigation",
+  "footer": "kept project editorial footer",
+  "imagery": "API report evidence only",
+  "photos": [],
+  "entry": "review and route citizen road reports",
+  "fingerprint": [
+    "filterable priority queue",
+    "read-only facts disclosure",
+    "photo and EXIF comparison",
+    "separate correction note",
+    "explicit verify reject merge",
+    "human email preview"
+  ],
+  "sections": [
+    "queue",
+    "selected report",
+    "facts",
+    "evidence",
+    "decision",
+    "routing",
+    "email preview"
+  ],
+  "signature": "read-only evidence beside moderation queue",
+  "waived": [
+    "38iii: live queue count is data",
+    "39b: multi-line queue records are selectable compound controls"
+  ],
+  "prompt": "Redesign /admin/moderasi following sijago-docs and current SIJAGO theme guide, retaining all functions",
+  "verification": {
+    "checks": 39,
+    "api": "mocked, no real mutations or email sends",
+    "render": "0 FAIL, 0 WARN, 2 justified waivers",
+    "finishReview": "subagent, 4 findings resolved"
+  }
+}

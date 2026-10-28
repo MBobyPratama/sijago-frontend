@@ -1,0 +1,27 @@
+{
+  "scanned": "2026-10-28",
+  "scope": "app",
+  "findings": {
+    "font": "src/app/layout.tsx:7 Plus Jakarta Sans",
+    "palette": "src/app/public-map/tokens.css:3 shared SIJAGO tokens",
+    "reference": "src/app/theme-guide/page.tsx and theme-guide.css",
+    "requirements": "sijago-docs/PRD.md:316-327 FR-5.1 through FR-5.12",
+    "framework": "Next.js 15, React 19, existing CSS and Lucide"
+  },
+  "preserve": [
+    "all 10 destinations",
+    "all 4 existing fields and values",
+    "all six moderation actions and payloads",
+    "read-only citizen facts",
+    "agency codes and simulation email addresses",
+    "human confirmation for escalation"
+  ],
+  "introduce": [
+    "labelled search/status/priority controls",
+    "scoped admin workbench stylesheet",
+    "real API photos only",
+    "accurate request outcomes",
+    "stale/empty/loading/error states",
+    "mobile inspection focus and accessible email dialog"
+  ]
+}

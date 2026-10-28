@@ -1,0 +1,24 @@
+{
+  "scanned": "2026-10-28",
+  "scope": "app",
+  "findings": {
+    "font": "src/app/layout.tsx:7 Plus Jakarta Sans",
+    "palette": "src/app/public-map/tokens.css:3 shared SIJAGO brand tokens",
+    "controls": "src/app/lapor/lapor.css, src/app/lacak/lacak.css, src/app/laporan/[id]/detail.css",
+    "framework": "package.json Next.js 15 / React 19",
+    "rules": "sijago-docs/UI_UX_GUIDE.md and PRD.md"
+  },
+  "preserve": [
+    "clipboard actions",
+    "category filter IDs",
+    "all route destinations",
+    "six mandatory governance texts verbatim",
+    "existing SIJAGO palette and Plus Jakarta Sans"
+  ],
+  "introduce": [
+    "actual resident typography and tokens",
+    "interactive local component specimens",
+    "resident navigation",
+    "honest clipboard failure state"
+  ]
+}

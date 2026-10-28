@@ -1,0 +1,150 @@
+[
+  {
+    "name": "Seven fields retained",
+    "pass": true
+  },
+  {
+    "name": "Server values loaded",
+    "pass": true
+  },
+  {
+    "name": "Ratio converted to percent",
+    "pass": true
+  },
+  {
+    "name": "Canonical regenerate loaded",
+    "pass": true
+  },
+  {
+    "name": "No changes locks save",
+    "pass": true
+  },
+  {
+    "name": "No overflow 320",
+    "pass": true
+  },
+  {
+    "name": "No overflow 375",
+    "pass": true
+  },
+  {
+    "name": "No overflow 768",
+    "pass": true
+  },
+  {
+    "name": "No overflow 1024",
+    "pass": true
+  },
+  {
+    "name": "No overflow 1440",
+    "pass": true
+  },
+  {
+    "name": "No overflow 1920",
+    "pass": true
+  },
+  {
+    "name": "Dirty enables save",
+    "pass": true
+  },
+  {
+    "name": "Persistent save controls visible",
+    "pass": true
+  },
+  {
+    "name": "Cancel navigation preserves route",
+    "pass": true
+  },
+  {
+    "name": "Cancel navigation preserves edits",
+    "pass": true
+  },
+  {
+    "name": "Discard restores baseline",
+    "pass": true
+  },
+  {
+    "name": "Invalid ratio blocked",
+    "pass": true
+  },
+  {
+    "name": "Validation visible and associated",
+    "pass": true
+  },
+  {
+    "name": "Integer validation",
+    "pass": true
+  },
+  {
+    "name": "Failed save no success",
+    "pass": true
+  },
+  {
+    "name": "Failed save keeps changes",
+    "pass": true
+  },
+  {
+    "name": "Payload canonical ratio",
+    "pass": true
+  },
+  {
+    "name": "Payload legacy ratio synchronized",
+    "pass": true
+  },
+  {
+    "name": "Payload canonical AI limit",
+    "pass": true
+  },
+  {
+    "name": "Payload legacy AI limit synchronized",
+    "pass": true
+  },
+  {
+    "name": "Only changed parameters submitted",
+    "pass": true
+  },
+  {
+    "name": "Double submit prevented",
+    "pass": true
+  },
+  {
+    "name": "Success only after server confirmation",
+    "pass": true
+  },
+  {
+    "name": "Save updates clean baseline",
+    "pass": true
+  },
+  {
+    "name": "Editing clears stale success",
+    "pass": true
+  },
+  {
+    "name": "Reload restores server snapshot",
+    "pass": true
+  },
+  {
+    "name": "Missing server parameters disclosed",
+    "pass": true
+  },
+  {
+    "name": "Offline source is reference values",
+    "pass": true
+  },
+  {
+    "name": "Reference values cannot fake save",
+    "pass": true
+  },
+  {
+    "name": "Labels and descriptions",
+    "pass": true
+  },
+  {
+    "name": "Settings active navigation",
+    "pass": true
+  },
+  {
+    "name": "Confirmed internal navigation works",
+    "pass": true
+  }
+]

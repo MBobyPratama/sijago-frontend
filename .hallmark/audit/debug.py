@@ -1,0 +1,2 @@
+from pathlib import Path
+p=Path('.hallmark/verify-audit.mjs');s=p.read_text(encoding='utf-8');print(s.splitlines()[1][2750:3100]);s=s.replace("await page.select('#audit-action','REPORT_SUBMITTED');", "await page.select('#audit-action','REPORT_SUBMITTED');console.log('FILTERDEBUG',await page.$eval('#audit-search',e=>e.value),await page.$eval('#audit-action',e=>e.value),await page.$$eval('.audit-detail-toggle',e=>e.length),await page.$eval('.audit-workspace',e=>e.textContent));");p.write_text(s,encoding='utf-8')

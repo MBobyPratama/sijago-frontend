@@ -1,0 +1,25 @@
+{
+  "scanned": "2026-10-29",
+  "scope": "app",
+  "findings": {
+    "font": "src/app/layout.tsx Plus Jakarta Sans",
+    "palette": "src/app/public-map/tokens.css SIJAGO brand",
+    "reference": "current theme guide and agency navigation",
+    "requirements": "sijago-docs/PRD.md FR-9.1 through FR-9.9",
+    "data": "backend weather.service.ts returns aggregate snapshot with simulated baselines; period is not implemented in its query",
+    "map": "previous red zones and report markers were fixed samples"
+  },
+  "preserve": [
+    "all 14 destinations including map attribution",
+    "period and stale simulation controls",
+    "sync and export handlers",
+    "all district source material and mandatory indicative disclaimer"
+  ],
+  "introduce": [
+    "actual district filter coupling KPIs/map/comparison/recommendations",
+    "data-driven accessible district markers",
+    "honest source/last sync/error/sample states",
+    "separate metric scales",
+    "responsive layout"
+  ]
+}

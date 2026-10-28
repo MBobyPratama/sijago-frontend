@@ -1,0 +1,23 @@
+{
+  "scanned": "2026-10-28",
+  "findings": {
+    "fonts": "Plus Jakarta Sans, src/app/layout.tsx:2",
+    "palette": "SIJAGO primary #1E40AF, civic #059669, ai #4F46E5, tailwind.config.ts:20",
+    "framework": "Next.js 15 App Router + React 19",
+    "spacing": "Tailwind 4px scale",
+    "motion": "CSS control feedback only"
+  },
+  "preserve": [
+    "All report fetch and upvote endpoints",
+    "Existing links and filter controls",
+    "Draft labels and summary disclosure",
+    "Plus Jakarta Sans and SIJAGO brand colors",
+    "Existing uncommitted work, snapshot saved in before-source"
+  ],
+  "introduce": [
+    "Map-first civic workbench",
+    "Scoped tokens and accessible control states",
+    "Status filter",
+    "Map and list selection"
+  ]
+}

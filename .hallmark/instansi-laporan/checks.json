@@ -1,0 +1,162 @@
+[
+  {
+    "name": "Agency records loaded",
+    "pass": true
+  },
+  {
+    "name": "Completion locked without evidence",
+    "pass": true
+  },
+  {
+    "name": "Demo toggle retained",
+    "pass": true
+  },
+  {
+    "name": "EXIF simulation retained",
+    "pass": true
+  },
+  {
+    "name": "Demo cannot unlock completion",
+    "pass": true
+  },
+  {
+    "name": "No overflow 320",
+    "pass": true
+  },
+  {
+    "name": "No overflow 375",
+    "pass": true
+  },
+  {
+    "name": "No overflow 768",
+    "pass": true
+  },
+  {
+    "name": "No overflow 850",
+    "pass": true
+  },
+  {
+    "name": "No overflow 1024",
+    "pass": true
+  },
+  {
+    "name": "No overflow 1440",
+    "pass": true
+  },
+  {
+    "name": "No overflow 1920",
+    "pass": true
+  },
+  {
+    "name": "Search empty",
+    "pass": true
+  },
+  {
+    "name": "Status filter",
+    "pass": true
+  },
+  {
+    "name": "Failed update visible",
+    "pass": true
+  },
+  {
+    "name": "Failure preserves status",
+    "pass": true
+  },
+  {
+    "name": "Process status saved",
+    "pass": true
+  },
+  {
+    "name": "Date sent",
+    "pass": true
+  },
+  {
+    "name": "Note sent",
+    "pass": true
+  },
+  {
+    "name": "Correct agency payload",
+    "pass": true
+  },
+  {
+    "name": "Unconfigured upload reports failure",
+    "pass": true
+  },
+  {
+    "name": "Failed upload cannot unlock completion",
+    "pass": true
+  },
+  {
+    "name": "Real uploaded photo registered",
+    "pass": true
+  },
+  {
+    "name": "No fabricated GPS metadata",
+    "pass": true
+  },
+  {
+    "name": "Actual EXIF distance warning",
+    "pass": true
+  },
+  {
+    "name": "Completed status saved with evidence",
+    "pass": true
+  },
+  {
+    "name": "Return reason required",
+    "pass": true
+  },
+  {
+    "name": "Return failure retains reason",
+    "pass": true
+  },
+  {
+    "name": "Return payload retained",
+    "pass": true
+  },
+  {
+    "name": "Agency switch isolates report",
+    "pass": true
+  },
+  {
+    "name": "Empty tenant no unrelated detail",
+    "pass": true
+  },
+  {
+    "name": "Stale data labelled",
+    "pass": true
+  },
+  {
+    "name": "Initial offline samples labelled",
+    "pass": true
+  },
+  {
+    "name": "Sample cannot claim saved status",
+    "pass": true
+  },
+  {
+    "name": "Labels retained",
+    "pass": true
+  },
+  {
+    "name": "Mobile record list collapsed",
+    "pass": true
+  },
+  {
+    "name": "Mobile dropdown focuses detail",
+    "pass": true
+  },
+  {
+    "name": "Mobile dropdown scrolls detail",
+    "pass": true
+  },
+  {
+    "name": "Mobile list disclosure works",
+    "pass": true
+  },
+  {
+    "name": "Late agency response cannot replace current agency",
+    "pass": true
+  }
+]

@@ -1,0 +1,146 @@
+[
+  {
+    "name": "Three upload controls remain",
+    "pass": true
+  },
+  {
+    "name": "Each structured field has an accessible visible label",
+    "pass": true
+  },
+  {
+    "name": "No horizontal overflow at 320px",
+    "pass": true
+  },
+  {
+    "name": "Dimension inputs align at 320px",
+    "pass": true
+  },
+  {
+    "name": "Selected size criteria visible at 320px",
+    "pass": true
+  },
+  {
+    "name": "No horizontal overflow at 375px",
+    "pass": true
+  },
+  {
+    "name": "Dimension inputs align at 375px",
+    "pass": true
+  },
+  {
+    "name": "Selected size criteria visible at 375px",
+    "pass": true
+  },
+  {
+    "name": "No horizontal overflow at 768px",
+    "pass": true
+  },
+  {
+    "name": "Dimension inputs align at 768px",
+    "pass": true
+  },
+  {
+    "name": "Selected size criteria visible at 768px",
+    "pass": true
+  },
+  {
+    "name": "No horizontal overflow at 1440px",
+    "pass": true
+  },
+  {
+    "name": "Dimension inputs align at 1440px",
+    "pass": true
+  },
+  {
+    "name": "Selected size criteria visible at 1440px",
+    "pass": true
+  },
+  {
+    "name": "No horizontal overflow at 1920px",
+    "pass": true
+  },
+  {
+    "name": "Dimension inputs align at 1920px",
+    "pass": true
+  },
+  {
+    "name": "Selected size criteria visible at 1920px",
+    "pass": true
+  },
+  {
+    "name": "Duplicate report detail link preserved",
+    "pass": true
+  },
+  {
+    "name": "Outside-city simulation disables continue",
+    "pass": true
+  },
+  {
+    "name": "Valid region enables continue",
+    "pass": true
+  },
+  {
+    "name": "Suggested street copies into landmark",
+    "pass": true
+  },
+  {
+    "name": "Upload registration and photo preview work",
+    "pass": true
+  },
+  {
+    "name": "Facts are saved before the draft stage",
+    "pass": true
+  },
+  {
+    "name": "Template fallback label remains visible",
+    "pass": true
+  },
+  {
+    "name": "Submit requires approval",
+    "pass": true
+  },
+  {
+    "name": "Approval enables submit",
+    "pass": true
+  },
+  {
+    "name": "Fact edits reset approval",
+    "pass": true
+  },
+  {
+    "name": "Stale draft blocks submission",
+    "pass": true
+  },
+  {
+    "name": "Regenerated draft requires fresh approval",
+    "pass": true
+  },
+  {
+    "name": "Review comparison fits on phone",
+    "pass": true
+  },
+  {
+    "name": "Server rejects stale approval visibly",
+    "pass": true
+  },
+  {
+    "name": "Server rejection does not show success",
+    "pass": true
+  },
+  {
+    "name": "Network failure does not show a false success",
+    "pass": true
+  },
+  {
+    "name": "Successful submit shows returned ticket",
+    "pass": true
+  },
+  {
+    "name": "Idempotency header remains attached",
+    "pass": true
+  },
+  {
+    "name": "Tracking and audit links preserved",
+    "pass": true
+  }
+]

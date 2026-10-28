@@ -1,0 +1,27 @@
+{
+  "scanned": "2026-10-28",
+  "route": "http://localhost:3001/lapor",
+  "scope": "app",
+  "findings": {
+    "font": "src/app/layout.tsx: Plus Jakarta Sans",
+    "palette": "src/app/public-map/tokens.css: SIJAGO blue, civic green, AI indigo",
+    "framework": "Next.js App Router, React, TypeScript",
+    "requirements": "../sijago-docs/UI_UX_GUIDE.md: three stages and mandatory draft-source labels"
+  },
+  "preserve": [
+    "all report endpoints and input values",
+    "15 links",
+    "11 initial fields",
+    "20 handlers",
+    "approval reset and hash validation",
+    "upload compression, EXIF and registration"
+  ],
+  "introduce": [
+    "clear three-stage layout",
+    "demo disclosures",
+    "real vs demo submission distinction",
+    "image preview",
+    "accessible labels and focus",
+    "full size descriptions on small screens"
+  ]
+}

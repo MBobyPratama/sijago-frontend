@@ -1,0 +1,42 @@
+{
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "app",
+  "shape": "district weather snapshot comparison",
+  "theme": "brand",
+  "axes": "cool/sans/blue",
+  "hero": "none, analytics app screen",
+  "nav": "shared SIJAGO agency task navigation",
+  "footer": "kept project footer",
+  "imagery": "MapLibre basemap and source-derived district centers",
+  "photos": [],
+  "entry": "inspect weather and road conditions by district",
+  "fingerprint": [
+    "source and timestamp",
+    "coupled district control",
+    "summary figures",
+    "district map",
+    "separate metric scales",
+    "rule-based recommendations"
+  ],
+  "sections": [
+    "warning",
+    "source scope",
+    "filters",
+    "KPIs",
+    "map and comparison",
+    "recommendations",
+    "stale simulation"
+  ],
+  "signature": "district snapshot markers synchronized with source comparison",
+  "waived": [
+    "39b: data markers use variable size to encode report counts"
+  ],
+  "prompt": "Redesign /instansi/weather-intelligence following sijago-docs and theme guide, retaining all functions",
+  "verification": {
+    "checks": 41,
+    "api": "mocked; no actual sync or export requests",
+    "finishReview": "subagent, 1 finding resolved",
+    "render": "0 FAIL, 0 WARN, 1 data-marker waiver"
+  }
+}

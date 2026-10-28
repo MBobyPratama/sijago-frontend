@@ -8,6 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["var(--font-plus-jakarta-sans)", "sans-serif"],
+      },
       colors: {
         sijago: {
           primary: "#1E40AF", // Bogor Rain Blue

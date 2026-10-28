@@ -1,0 +1,75 @@
+import {createRequire} from 'node:module';
+import {writeFileSync} from 'node:fs';
+const require=createRequire(new URL('./tooling/package.json',import.meta.url));
+const browser=await require('puppeteer-core').launch({executablePath:'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',headless:true});
+const checks=[];const check=(name,ok)=>{checks.push({name,pass:Boolean(ok)});if(!ok)throw Error(name)};
+const report=(code,status='DIPROSES',extra={})=>({id:'report-test',ticketCode:code,status,districtName:'Bogor Tengah',subdistrictName:'Paledang',assignedAgencyName:'Instansi uji',submittedAt:'2026-10-25T07:20:00Z',verifiedAt:'2026-10-26T02:00:00Z',forwardedAt:'2026-10-26T05:00:00Z',resolvedAt:null,draft:{sourceType:'AI',permanentLabel:'✨ [Draf Dibantu AI]',title:'Laporan uji kerusakan jalan di Bogor Tengah',body:'Kondisi jalan yang dilaporkan.'},...extra});
+try {
+ const page=await browser.newPage();await page.setViewport({width:1440,height:1000});
+ await page.setRequestInterception(true);
+ const respond=(request,body)=>request.respond({status:200,contentType:'application/json',headers:{'Access-Control-Allow-Origin':'*'},body:JSON.stringify(body)});
+ page.on('request',request=>{
+  if(request.method()==='OPTIONS')return request.respond({status:204,headers:{'Access-Control-Allow-Origin':'*','Access-Control-Allow-Headers':'*','Access-Control-Allow-Methods':'GET,OPTIONS'}});
+  const path=new URL(request.url()).pathname;
+  if(path.includes('/track/')){
+   const code=decodeURIComponent(path.split('/track/')[1]);
+   if(code==='OFFLINE')return request.abort('connectionfailed');
+   if(code==='MISSING'||code.startsWith('SJG-2026-'))return respond(request,{success:false,error:{code:'TICKET_NOT_FOUND'}});
+   if(code==='SERVER-ERROR')return respond(request,{success:false,error:{code:'SERVER_ERROR'}});
+   if(code==='SLOW')return setTimeout(()=>respond(request,{success:true,data:report('SLOW')}),1000);
+   if(code==='WAITING')return respond(request,{success:true,data:report(code,'MENUNGGU_VERIFIKASI',{assignedAgencyName:null,verifiedAt:null,forwardedAt:null,draft:null})});
+   if(code==='REJECTED')return respond(request,{success:true,data:report(code,'DITOLAK',{rejectionNote:'Foto belum sesuai kondisi laporan.',verifiedAt:null,forwardedAt:null,assignedAgencyName:null})});
+   if(code==='DUPLICATE')return respond(request,{success:true,data:report(code,'DUPLIKAT',{assignedAgencyName:null,verifiedAt:null,forwardedAt:null})});
+   if(code==='REOPENED')return respond(request,{success:true,data:report(code,'DIBUKA_KEMBALI',{resolvedAt:'2026-10-27T02:00:00Z'})});
+   if(code==='CLOSED')return respond(request,{success:true,data:report(code,'DITUTUP',{resolvedAt:'2026-10-27T02:00:00Z'})});
+   if(code==='COMPLETE')return respond(request,{success:true,data:report(code,'SELESAI',{resolvedAt:'2026-10-27T02:00:00Z',photos:[{id:'photo1',kind:'BEFORE',publicUrl:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aL1cAAAAASUVORK5CYII='},{id:'photo2',kind:'AFTER',publicUrl:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aL1cAAAAASUVORK5CYII='}]})});
+   return respond(request,{success:true,data:report(code)});
+  }
+  request.continue();
+ });
+ const input=async(code)=>{await page.click('#tracking-code');await page.keyboard.down('Control');await page.keyboard.press('a');await page.keyboard.up('Control');await page.keyboard.press('Backspace');await page.keyboard.type(code);};
+ const ready=()=>page.waitForSelector('.tracking-result');
+ await page.goto('http://localhost:3001/lacak?kode=LIVE-001',{waitUntil:'domcontentloaded'});await ready();
+ await page.evaluate(()=>document.fonts.ready);await page.addStyleTag({content:'nextjs-portal{display:none!important}'});
+ check('URL kode initializes lookup',await page.$eval('.tracking-ticket',el=>el.textContent==='LIVE-001'));
+ check('Server data is labeled',await page.$eval('.tracking-data-source',el=>el.textContent.includes('dari server')));
+ check('Timeline has four core stages',await page.$$eval('.tracking-timeline li',els=>els.length===4));
+ check('Processing report has three completed stages',await page.$$eval('.tracking-timeline .is-done',els=>els.length===3));
+ check('Dates use WIB',await page.$eval('.tracking-timeline-heading span',el=>el.textContent.includes('14.20 WIB')));
+ check('PDF destination retained',await page.$eval('.tracking-actions a',el=>el.getAttribute('href').includes('/public/reports/LIVE-001/document')&&el.target==='_blank'&&el.rel.includes('noopener')));
+ check('Detail destination retained',await page.$eval('.tracking-detail-link',el=>el.getAttribute('href')==='/laporan/LIVE-001'));
+ for(const width of [320,375,768,1440,1920]){await page.setViewport({width,height:1000});check(`No horizontal overflow at ${width}px`,await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));check(`Actions precede timeline at ${width}px`,await page.evaluate(()=>document.querySelector('.tracking-actions').getBoundingClientRect().top<document.querySelector('.tracking-timeline').getBoundingClientRect().top));if(width===375||width===1440)await page.screenshot({path:`.hallmark/lacak/live-${width}.png`,fullPage:true});}
+ await input('');await page.waitForFunction(()=>document.querySelector('.tracking-state h2')?.textContent.includes('Masukkan'));
+ check('Empty input clears stale report',!(await page.$('.tracking-result')));
+ await input('MISSING');await page.waitForFunction(()=>document.querySelector('.tracking-state h2')?.textContent.includes('tidak ditemukan'));
+ check('Unknown ticket does not show unrelated sample',!(await page.$('.tracking-result')));
+ await input('OFFLINE');await page.waitForSelector('.tracking-error');
+ check('Offline shows error and retry',await page.$eval('.tracking-error button',el=>el.textContent.includes('Coba lagi')));
+ await input('SERVER-ERROR');await page.waitForSelector('.tracking-error');
+ check('Server errors are distinct from not-found',await page.$eval('.tracking-state h2',el=>el.textContent.includes('belum dapat')));
+ await input('WAITING');await ready();
+ check('Missing agency never borrows demo agency',await page.$eval('.tracking-agency',el=>el.textContent.includes('Belum ditentukan')&&!el.textContent.includes('PUPR')));
+ check('Missing live draft never borrows demo title',await page.$eval('.tracking-summary h2',el=>el.textContent==='Laporan kerusakan jalan'));
+ check('Waiting report has one complete stage',await page.$$eval('.tracking-timeline .is-done',els=>els.length===1));
+ await input('REJECTED');await ready();
+ check('Rejection reason displayed',await page.$eval('.tracking-terminal',el=>el.textContent.includes('Foto belum sesuai')));
+ check('Stopped stages do not promise further progress',await page.$eval('.tracking-timeline',el=>!el.textContent.includes('Menunggu verifikasi')&&!el.textContent.includes('Menunggu tindak lanjut')));
+ check('Rejected report does not appear verified',await page.$$eval('.tracking-timeline .is-done',els=>els.length===1));
+ await input('DUPLICATE');await ready();check('Duplicate status supported',await page.$eval('.tracking-status',el=>el.textContent==='Duplikat'));
+ await input('REOPENED');await ready();check('Reopened stage is visible',await page.$eval('.tracking-timeline',el=>el.textContent.includes('Laporan dibuka kembali')));
+ await input('CLOSED');await ready();check('Closed stage is visible',await page.$eval('.tracking-timeline',el=>el.textContent.includes('Pemantauan berakhir')));
+ await input('COMPLETE');await ready();
+ check('Before and after evidence from API is rendered',await page.$$eval('.tracking-evidence figcaption',els=>els.length===2&&els[1].textContent==='Sesudah perbaikan'));
+ await page.$eval('.tracking-demo',el=>el.open=true);
+ check('All sample ticket controls retained',await page.$$eval('.tracking-demo button',els=>els.length===3));
+ await page.click('.tracking-demo button');await ready();
+ check('Exact sample fallback is explicitly labeled',await page.$eval('.tracking-data-source',el=>el.textContent.includes('dữ liệu')||el.textContent.includes('data contoh')));
+ check('Original draft source label preserved',await page.$eval('.tracking-draft-label',el=>el.textContent.includes('Draf Dibantu AI')));
+ await input('SLOW');await page.waitForFunction(()=>document.querySelector('.tracking-state h2')?.textContent.includes('Mencari'));
+ check('Loading state clears prior results',!(await page.$('.tracking-result')));
+ await input('LATEST');await ready();
+ await page.waitForFunction(()=>document.querySelector('.tracking-ticket')?.textContent==='LATEST');
+ await new Promise(resolve=>setTimeout(resolve,1200));
+ check('Stale responses cannot replace latest lookup',await page.$eval('.tracking-ticket',el=>el.textContent==='LATEST'));
+ console.log(JSON.stringify(checks,null,2));writeFileSync('.hallmark/lacak/checks.json',JSON.stringify(checks,null,2));
+}finally{await browser.close()}

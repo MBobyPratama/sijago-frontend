@@ -1,0 +1,114 @@
+[
+  {
+    "name": "New guide heading",
+    "pass": true
+  },
+  {
+    "name": "Plus Jakarta Sans",
+    "pass": true
+  },
+  {
+    "name": "Brand color matches shared token",
+    "pass": true
+  },
+  {
+    "name": "Legacy Inter removed",
+    "pass": true
+  },
+  {
+    "name": "Type filter works",
+    "pass": true
+  },
+  {
+    "name": "Copy hex",
+    "pass": true
+  },
+  {
+    "name": "Copy token",
+    "pass": true
+  },
+  {
+    "name": "Components filter works",
+    "pass": true
+  },
+  {
+    "name": "Support preview toggles",
+    "pass": true
+  },
+  {
+    "name": "Consent initially locked",
+    "pass": true
+  },
+  {
+    "name": "Consent unlocks preview",
+    "pass": true
+  },
+  {
+    "name": "Input works",
+    "pass": true
+  },
+  {
+    "name": "Select works",
+    "pass": true
+  },
+  {
+    "name": "State 0 selected",
+    "pass": true
+  },
+  {
+    "name": "State 1 selected",
+    "pass": true
+  },
+  {
+    "name": "State 2 selected",
+    "pass": true
+  },
+  {
+    "name": "State 3 selected",
+    "pass": true
+  },
+  {
+    "name": "State 4 selected",
+    "pass": true
+  },
+  {
+    "name": "Error linked to field",
+    "pass": true
+  },
+  {
+    "name": "Governance copy list retained",
+    "pass": true
+  },
+  {
+    "name": "Mandatory copy exact",
+    "pass": true
+  },
+  {
+    "name": "Directory destinations retained",
+    "pass": true
+  },
+  {
+    "name": "No overflow 320",
+    "pass": true
+  },
+  {
+    "name": "No overflow 375",
+    "pass": true
+  },
+  {
+    "name": "No overflow 768",
+    "pass": true
+  },
+  {
+    "name": "No overflow 1440",
+    "pass": true
+  },
+  {
+    "name": "No overflow 1920",
+    "pass": true
+  },
+  {
+    "name": "Label associations",
+    "pass": true
+  }
+]

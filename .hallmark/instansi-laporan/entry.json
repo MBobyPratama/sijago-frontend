@@ -1,0 +1,41 @@
+{
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "app",
+  "shape": "agency report queue and repair evidence form",
+  "theme": "brand",
+  "axes": "cool/sans/blue",
+  "hero": "none, app workbench",
+  "nav": "SIJAGO agency task navigation",
+  "footer": "kept project footer",
+  "imagery": "registered report evidence only",
+  "photos": [],
+  "entry": "update report progress and publish repair evidence",
+  "fingerprint": [
+    "agency selector",
+    "filterable ticket queue",
+    "status date and note",
+    "before and after evidence",
+    "return disclosure",
+    "explicit local simulations"
+  ],
+  "sections": [
+    "context",
+    "agency queue",
+    "report facts",
+    "status form",
+    "evidence",
+    "return",
+    "simulations"
+  ],
+  "signature": "real registered repair proof paired with status update",
+  "waived": [
+    "39b: compound selectable report records"
+  ],
+  "prompt": "Redesign /instansi/laporan following sijago-docs and theme guide, preserving functions",
+  "verification": {
+    "checks": 40,
+    "api": "mocked including Cloudinary; no live writes/uploads",
+    "finishReview": "subagent, 2 findings resolved"
+  }
+}

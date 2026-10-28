@@ -1,0 +1,22 @@
+/* Hallmark · component: admin navigation · genre: modern-minimal · theme: SIJAGO brand · v2.0.0 */
+/* Hallmark · pre-emit critique: retain the established moderation shell across admin tools */
+@import "../../app/public-map/tokens.css";
+.admin-app-header { font-family: var(--font-body); color: var(--color-ink); background: var(--color-paper-3); border-bottom: 1px solid var(--color-rule); line-height: 1.6; }
+.admin-header-container { max-width: var(--container); padding-inline: var(--gutter); margin-inline: auto; min-height: 80px; display: flex; align-items: center; justify-content: space-between; gap: var(--space-lg); }
+.admin-header-logo { flex-shrink: 0; }
+.admin-header-logo img { width: 160px; height: auto; }
+.admin-header-nav { display: flex; align-items: center; gap: var(--space-xs); }
+.admin-header-nav > a, .admin-header-menu summary { min-height: 44px; display: inline-flex; align-items: center; padding: var(--space-xs) var(--space-sm); border-radius: var(--radius-control); font-size: var(--text-sm); color: var(--color-muted); white-space: nowrap; }
+.admin-header-nav > a:hover, .admin-header-menu summary:hover { background: var(--color-paper-2); }
+.admin-header-nav a[aria-current=page] { background: var(--color-selected); color: var(--color-accent); }
+.admin-header-menu { position: relative; }
+.admin-header-menu summary { cursor: pointer; }
+.admin-header-menu > div { position: absolute; z-index: 60; width: 240px; right: 0; top: 100%; padding: var(--space-xs); border: 1px solid var(--color-rule); border-radius: var(--radius-control); background: var(--color-paper-3); }
+.admin-header-menu a { display: flex; align-items: center; min-height: 44px; padding: var(--space-xs) var(--space-sm); font-size: var(--text-sm); color: var(--color-ink-2); border-radius: var(--radius-control); white-space: nowrap; }
+.admin-header-menu a:hover { background: var(--color-paper-2); }
+.admin-header-menu .admin-mobile-link { display: none; }
+.admin-app-header :is(a,summary):focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
+.admin-app-header a:active { opacity: .8; }
+@media (max-width:760px) { .admin-header-nav .admin-desktop-link { display: none; } .admin-header-menu .admin-mobile-link { display: flex; } .admin-header-logo img { width: 130px; } }
+@media (max-width:420px) { .admin-header-container { padding-inline: var(--space-md); } }
+@media (prefers-reduced-motion:reduce) { .admin-app-header * { animation: none !important; transition: none !important; } }

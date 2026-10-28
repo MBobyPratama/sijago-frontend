@@ -1,0 +1,399 @@
+[
+ {
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "app",
+  "shape": "district weather snapshot comparison",
+  "theme": "brand",
+  "axes": "cool/sans/blue",
+  "hero": "none, analytics app screen",
+  "nav": "shared SIJAGO agency task navigation",
+  "footer": "kept project footer",
+  "imagery": "MapLibre basemap and source-derived district centers",
+  "photos": [],
+  "entry": "inspect weather and road conditions by district",
+  "fingerprint": [
+   "source and timestamp",
+   "coupled district control",
+   "summary figures",
+   "district map",
+   "separate metric scales",
+   "rule-based recommendations"
+  ],
+  "sections": [
+   "warning",
+   "source scope",
+   "filters",
+   "KPIs",
+   "map and comparison",
+   "recommendations",
+   "stale simulation"
+  ],
+  "signature": "district snapshot markers synchronized with source comparison",
+  "waived": [
+   "39b: data markers use variable size to encode report counts"
+  ],
+  "prompt": "Redesign /instansi/weather-intelligence following sijago-docs and theme guide, retaining all functions",
+  "verification": {
+   "checks": 41,
+   "api": "mocked; no actual sync or export requests",
+   "finishReview": "subagent, 1 finding resolved",
+   "render": "0 FAIL, 0 WARN, 1 data-marker waiver"
+  },
+  "date": "2026-10-28"
+ },
+ {
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "app",
+  "shape": "agency report queue and repair evidence form",
+  "theme": "brand",
+  "axes": "cool/sans/blue",
+  "hero": "none, app workbench",
+  "nav": "SIJAGO agency task navigation",
+  "footer": "kept project footer",
+  "imagery": "registered report evidence only",
+  "photos": [],
+  "entry": "update report progress and publish repair evidence",
+  "fingerprint": [
+   "agency selector",
+   "filterable ticket queue",
+   "status date and note",
+   "before and after evidence",
+   "return disclosure",
+   "explicit local simulations"
+  ],
+  "sections": [
+   "context",
+   "agency queue",
+   "report facts",
+   "status form",
+   "evidence",
+   "return",
+   "simulations"
+  ],
+  "signature": "real registered repair proof paired with status update",
+  "waived": [
+   "39b: compound selectable report records"
+  ],
+  "prompt": "Redesign /instansi/laporan following sijago-docs and theme guide, preserving functions",
+  "verification": {
+   "checks": 40,
+   "api": "mocked including Cloudinary; no live writes/uploads",
+   "finishReview": "subagent, 2 findings resolved"
+  },
+  "date": "2026-10-28"
+ },
+ {
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "app",
+  "shape": "grouped operational settings form",
+  "theme": "brand",
+  "axes": "cool/sans/blue",
+  "hero": "none, app settings",
+  "nav": "shared SIJAGO admin task navigation",
+  "footer": "kept project footer",
+  "imagery": "none required for operational parameters",
+  "photos": [],
+  "entry": "review and update system configuration",
+  "fingerprint": [
+   "group index",
+   "labelled unit inputs",
+   "four parameter groups",
+   "dirty state summary",
+   "persistent save controls"
+  ],
+  "sections": [
+   "context",
+   "duplicates",
+   "AI drafting",
+   "monitoring",
+   "weather",
+   "save summary"
+  ],
+  "signature": "explicit units and pending changes across operational parameters",
+  "waived": [],
+  "prompt": "Redesign /admin/pengaturan following sijago-docs and current theme guide, preserving functions",
+  "verification": {
+   "checks": 37,
+   "api": "mocked, no real configuration writes",
+   "sloplint": "0 FAIL, 0 WARN, brand palette dismissed",
+   "finishReview": "subagent, 2 findings resolved"
+  },
+  "date": "2026-10-28"
+ },
+ {
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "app",
+  "shape": "filterable audit ledger with inline snapshots",
+  "theme": "brand",
+  "axes": "cool/sans/blue",
+  "hero": "none, admin app screen",
+  "nav": "shared SIJAGO admin task navigation",
+  "footer": "kept project footer",
+  "imagery": "none required for log data",
+  "photos": [],
+  "entry": "inspect report history and before/after snapshots",
+  "fingerprint": [
+   "search and filters",
+   "responsive ledger",
+   "inline before/after",
+   "complete hashes",
+   "local simulation and export capability disclosure"
+  ],
+  "sections": [
+   "context",
+   "filters",
+   "ledger",
+   "details",
+   "pagination",
+   "audit tools"
+  ],
+  "signature": "complete before-and-after evidence per audit event",
+  "waived": [],
+  "prompt": "Redesign /admin/audit following sijago-docs and current theme guide, retaining all functions",
+  "verification": {
+   "browserChecks": 38,
+   "api": "mocked; no log writes",
+   "build": "passed isolated production build",
+   "finishReview": "subagent ship",
+   "sloplint": "0 FAIL, 0 WARN; existing brand palette dismissed"
+  },
+  "date": "2026-10-28"
+ },
+ {
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "app",
+  "shape": "moderation queue and evidence workbench",
+  "theme": "brand",
+  "axes": "cool/sans/blue",
+  "hero": "none, admin app screen",
+  "nav": "SIJAGO admin task navigation",
+  "footer": "kept project editorial footer",
+  "imagery": "API report evidence only",
+  "photos": [],
+  "entry": "review and route citizen road reports",
+  "fingerprint": [
+   "filterable priority queue",
+   "read-only facts disclosure",
+   "photo and EXIF comparison",
+   "separate correction note",
+   "explicit verify reject merge",
+   "human email preview"
+  ],
+  "sections": [
+   "queue",
+   "selected report",
+   "facts",
+   "evidence",
+   "decision",
+   "routing",
+   "email preview"
+  ],
+  "signature": "read-only evidence beside moderation queue",
+  "waived": [
+   "38iii: live queue count is data",
+   "39b: multi-line queue records are selectable compound controls"
+  ],
+  "prompt": "Redesign /admin/moderasi following sijago-docs and current SIJAGO theme guide, retaining all functions",
+  "verification": {
+   "checks": 39,
+   "api": "mocked, no real mutations or email sends",
+   "render": "0 FAIL, 0 WARN, 2 justified waivers",
+   "finishReview": "subagent, 4 findings resolved"
+  },
+  "date": "2026-10-28"
+ },
+ {
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "app",
+  "shape": "indexed living component reference",
+  "theme": "brand",
+  "axes": "cool/sans/blue",
+  "hero": "none, reference app screen",
+  "nav": "SIJAGO resident shell plus local index",
+  "footer": "kept editorial project footer",
+  "imagery": "existing SIJAGO header logo",
+  "photos": [],
+  "entry": "reference resident UI tokens and patterns",
+  "fingerprint": [
+   "local category index",
+   "open swatch catalog",
+   "typographic specimens",
+   "interactive local form states",
+   "governance copy",
+   "route directory"
+  ],
+  "sections": [
+   "colors and status",
+   "typography and layout",
+   "resident components",
+   "governance",
+   "directory"
+  ],
+  "signature": "actual resident tokens and interactive state specimens",
+  "waived": [],
+  "prompt": "Update theme guide to match newly redesigned resident pages",
+  "verification": {
+   "browserChecks": 28,
+   "requests": "clipboard mocked, local component state only"
+  },
+  "date": "2026-10-28"
+ },
+ {
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "app",
+  "shape": "report record with evidence and community actions",
+  "theme": "brand",
+  "axes": "cool/sans/blue",
+  "hero": "none, app screen",
+  "nav": "SIJAGO resident navigation",
+  "footer": "kept project footer",
+  "imagery": "API report BEFORE, REPORT, AFTER photos only",
+  "photos": [],
+  "entry": "read and participate in a public road report",
+  "fingerprint": [
+   "report identity",
+   "left narrative evidence and community",
+   "right facts and map",
+   "OTP modal"
+  ],
+  "sections": [
+   "report identity",
+   "description and support",
+   "evidence",
+   "condition tags",
+   "community signoff",
+   "facts and location"
+  ],
+  "signature": "public road report evidence and resident participation",
+  "waived": [],
+  "prompt": "Redesign report detail following sijago-docs, retaining Plus Jakarta Sans, SIJAGO colors and functions",
+  "date": "2026-10-28"
+ },
+ {
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "app",
+  "shape": "ticket lookup and vertical timeline",
+  "theme": "brand",
+  "axes": "cool/sans/blue",
+  "hero": "none, functional app screen",
+  "nav": "SIJAGO resident navigation",
+  "footer": "kept project footer",
+  "imagery": "public report photos only when returned by API",
+  "photos": [],
+  "entry": "track a report",
+  "fingerprint": [
+   "ticket form",
+   "status summary",
+   "left vertical timeline",
+   "right agency and notifications",
+   "actions above timeline"
+  ],
+  "sections": [
+   "search",
+   "summary",
+   "timeline",
+   "agency",
+   "notifications",
+   "optional evidence"
+  ],
+  "signature": "one ticket with honest data provenance and chronological progress",
+  "waived": [],
+  "prompt": "Redesign /lacak for Bogor residents preserving Plus Jakarta Sans, SIJAGO colors, and existing functions",
+  "verification": {
+   "checks": 36,
+   "api": "mocked",
+   "links": "13/13",
+   "fields": "1/1",
+   "handlers": "2/2",
+   "finishReview": "subagent, 2 resolved",
+   "hallmark": "0 FAIL, 0 REFLEX"
+  },
+  "date": "2026-10-28"
+ },
+ {
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "app",
+  "shape": "three-stage reporting form",
+  "theme": "brand",
+  "axes": "cool/sans/blue",
+  "hero": "none, app screen",
+  "nav": "existing civic navigation reused on lapor",
+  "footer": "kept project footer",
+  "imagery": "live location map and real upload preview",
+  "photos": [],
+  "entry": "report road damage",
+  "fingerprint": [
+   "left vertical progress",
+   "right structured form",
+   "native demo disclosures",
+   "stacked mobile comparison"
+  ],
+  "sections": [
+   "facts",
+   "draft",
+   "approval",
+   "ticket"
+  ],
+  "signature": "facts and readonly draft reviewed together with approval invalidation",
+  "waived": [],
+  "prompt": "Redesign /lapor for Bogor residents while preserving SIJAGO brand and all functions",
+  "verification": {
+   "functionalChecks": 36,
+   "mockApi": true,
+   "finishReview": "subagent, 2 resolved",
+   "links": "15/15",
+   "fields": "11/11",
+   "handlers": "20/20"
+  },
+  "date": "2026-10-28"
+ },
+ {
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "app",
+  "shape": "civic map workbench",
+  "theme": "brand",
+  "axes": "cool/sans/blue",
+  "hero": "none, functional app screen",
+  "nav": "kept project shell",
+  "footer": "kept project footer",
+  "imagery": "working MapLibre map of report coordinates",
+  "photos": [],
+  "entry": "public road map",
+  "fingerprint": [
+   "left report list",
+   "right map",
+   "inline native filters",
+   "mobile map first"
+  ],
+  "sections": [
+   "page heading",
+   "filters",
+   "reports and map",
+   "data status",
+   "community hint"
+  ],
+  "signature": "report selection linked to map with mobile scroll and responsive bounds",
+  "waived": [
+   "38iii neutral numeric report count",
+   "49b complete report titles wrap"
+  ],
+  "prompt": "Redesign public road map for Bogor residents, preserving SIJAGO palette, Plus Jakarta Sans, and functions",
+  "verification": {
+   "functionalChecks": 30,
+   "hallmarkFail": 0,
+   "hallmarkReflex": 0,
+   "finishReview": "subagent, 2 resolved"
+  },
+  "date": "2026-10-28"
+ }
+]

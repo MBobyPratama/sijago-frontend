@@ -1,0 +1,4 @@
+from pathlib import Path
+p=Path('src/app/laporan/[id]/page.tsx');s=p.read_text().replace('photo.kind === "BEFORE"','(photo.kind === "BEFORE" || photo.kind === "REPORT")');p.write_text(s)
+p=Path('.hallmark/verify-detail.mjs');s=p.read_text();s=s.replace("writeFileSync('.hallmark/detail/checks.json'",'''await page.reload({waitUntil:'networkidle2'}); await new Promise(r=>setTimeout(r,1000)); await page.click('.detail-tag-form button'); await page.keyboard.press('Shift+Tab');check('Modal focus trapped',await page.$eval('[role=dialog]',e=>e.contains(document.activeElement)));await page.keyboard.press('Escape');check('Escape closes dialog',!await page.$('[role=dialog]'));check('Focus restored',await page.$eval('.detail-tag-form button',e=>e===document.activeElement));
+writeFileSync('.hallmark/detail/checks.json' '''.rstrip());s=s.replace("console.log(requests);",'');p.write_text(s)

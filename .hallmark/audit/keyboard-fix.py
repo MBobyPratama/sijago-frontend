@@ -1,0 +1,2 @@
+from pathlib import Path
+p=Path('.hallmark/verify-audit.mjs');s=p.read_text(encoding='utf-8');s=s.replace("await page.locator('#audit-search').fill('');", "await page.focus('#audit-search');await page.keyboard.down('Control');await page.keyboard.press('A');await page.keyboard.up('Control');await page.keyboard.press('Backspace');");a=s.index("console.log('FILTERDEBUG'");b=s.index(';',a);s=s[:a]+s[b+1:];p.write_text(s,encoding='utf-8')

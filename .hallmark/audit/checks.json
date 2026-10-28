@@ -1,0 +1,154 @@
+[
+  {
+    "name": "Live source",
+    "pass": true
+  },
+  {
+    "name": "Pagination 10 rows",
+    "pass": true
+  },
+  {
+    "name": "UTC explicit despite browser timezone",
+    "pass": true
+  },
+  {
+    "name": "Full report ID",
+    "pass": true
+  },
+  {
+    "name": "Readable action label and original code",
+    "pass": true
+  },
+  {
+    "name": "Snapshot before",
+    "pass": true
+  },
+  {
+    "name": "Snapshot after",
+    "pass": true
+  },
+  {
+    "name": "Full hashes",
+    "pass": true
+  },
+  {
+    "name": "No unverified integrity claim",
+    "pass": true
+  },
+  {
+    "name": "No overflow expanded 320",
+    "pass": true
+  },
+  {
+    "name": "No overflow expanded 375",
+    "pass": true
+  },
+  {
+    "name": "No overflow expanded 768",
+    "pass": true
+  },
+  {
+    "name": "No overflow expanded 800",
+    "pass": true
+  },
+  {
+    "name": "No overflow expanded 850",
+    "pass": true
+  },
+  {
+    "name": "No overflow expanded 1024",
+    "pass": true
+  },
+  {
+    "name": "No overflow expanded 1440",
+    "pass": true
+  },
+  {
+    "name": "No overflow expanded 1920",
+    "pass": true
+  },
+  {
+    "name": "Collapse detail",
+    "pass": true
+  },
+  {
+    "name": "Next page",
+    "pass": true
+  },
+  {
+    "name": "Previous page",
+    "pass": true
+  },
+  {
+    "name": "Actor search",
+    "pass": true
+  },
+  {
+    "name": "Action filter",
+    "pass": true
+  },
+  {
+    "name": "No match state",
+    "pass": true
+  },
+  {
+    "name": "Reset filters",
+    "pass": true
+  },
+  {
+    "name": "Local simulation honest",
+    "pass": true
+  },
+  {
+    "name": "Simulation does not mutate",
+    "pass": true
+  },
+  {
+    "name": "Close simulation",
+    "pass": true
+  },
+  {
+    "name": "Export not falsely wired",
+    "pass": true
+  },
+  {
+    "name": "Stale source",
+    "pass": true
+  },
+  {
+    "name": "Stale rows retained",
+    "pass": true
+  },
+  {
+    "name": "Real empty no mock",
+    "pass": true
+  },
+  {
+    "name": "Empty source still server",
+    "pass": true
+  },
+  {
+    "name": "Initial offline labelled sample",
+    "pass": true
+  },
+  {
+    "name": "Sample entry preserved",
+    "pass": true
+  },
+  {
+    "name": "All fields labelled",
+    "pass": true
+  },
+  {
+    "name": "Moderation shares admin header",
+    "pass": true
+  },
+  {
+    "name": "Moderation current nav",
+    "pass": true
+  },
+  {
+    "name": "Shared header remains styled",
+    "pass": true
+  }
+]

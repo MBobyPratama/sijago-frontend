@@ -1,0 +1,7 @@
+from pathlib import Path
+p=Path('src/app/theme-guide/page.tsx');s=p.read_text(encoding='utf-8');s=s.replace('const BRAND_COLORS = [','''const BRAND_COLORS = [
+  {role:"Draf template",name:"Slate Neutral",hex:"#475569",token:"--guide-fallback",tailwindBg:"bg-slate-600",usage:"Referensi warna fallback dari sijago-docs. Label warga memakai pasangan ink netral agar tetap terbaca."},
+  {role:"Peringatan",name:"Amber Alert",hex:"#D97706",token:"--guide-waiting",tailwindBg:"bg-amber-600",usage:"Peringatan dan referensi antrean verifikasi internal; bukan warna teks pada latar terang."},''');# Keep primary brand first, ancillary at end
+start=s.index('  {role:"Draf template"');end=s.index('  {role:"Identitas utama"');aux=s[start:end];s=s[:start]+s[end:];end=s.index('];\nconst MAP_MARKER');s=s[:end]+aux+s[end:]
+s=s.replace('copiedCode===color.tailwindBg?"Disalin":"Salin kelas"','copiedCode===color.tailwindBg?"Disalin":color.tailwindBg.startsWith("var(")?"Salin nilai CSS":"Salin kelas"');p.write_text(s,encoding='utf-8')
+p=Path('src/app/theme-guide/theme-guide.css');s=p.read_text(encoding='utf-8').replace('--guide-waiting: #D97706;', '--guide-waiting: #D97706; --guide-fallback: #475569;').replace('.guide-type-section {', '.guide-type-section { line-height: 1.4;');s=s.replace('/* Hallmark · pre-emit','/* Hallmark · finish-review: subagent · 3 findings · 3 resolved: CSS value copy labels, accurate heading leading, copyable fallback swatch */\n/* Hallmark · pre-emit');p.write_text(s,encoding='utf-8')

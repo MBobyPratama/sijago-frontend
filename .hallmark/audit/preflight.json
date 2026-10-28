@@ -1,0 +1,25 @@
+{
+  "scanned": "2026-10-28",
+  "scope": "app",
+  "findings": {
+    "font": "src/app/layout.tsx Plus Jakarta Sans",
+    "palette": "src/app/public-map/tokens.css shared SIJAGO palette",
+    "system": "theme guide and admin moderation",
+    "requirements": "sijago-docs/PRD.md FR-7.1 through FR-7.7",
+    "backend": "src/index.ts GET /v1/audit/logs; no audited export endpoint"
+  },
+  "preserve": [
+    "GET /audit/logs",
+    "all log fields and raw values",
+    "local simulation handlers",
+    "all 10 navigation destinations"
+  ],
+  "introduce": [
+    "search and action/actor filters",
+    "pagination over loaded data",
+    "expandable complete before/after snapshots and hashes",
+    "responsive record layout",
+    "honest source/integrity/export states",
+    "shared admin navbar stylesheet"
+  ]
+}

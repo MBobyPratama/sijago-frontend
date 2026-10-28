@@ -1,0 +1,39 @@
+{
+  "mode": "redesign",
+  "depth": "full",
+  "scope": "app",
+  "shape": "filterable audit ledger with inline snapshots",
+  "theme": "brand",
+  "axes": "cool/sans/blue",
+  "hero": "none, admin app screen",
+  "nav": "shared SIJAGO admin task navigation",
+  "footer": "kept project footer",
+  "imagery": "none required for log data",
+  "photos": [],
+  "entry": "inspect report history and before/after snapshots",
+  "fingerprint": [
+    "search and filters",
+    "responsive ledger",
+    "inline before/after",
+    "complete hashes",
+    "local simulation and export capability disclosure"
+  ],
+  "sections": [
+    "context",
+    "filters",
+    "ledger",
+    "details",
+    "pagination",
+    "audit tools"
+  ],
+  "signature": "complete before-and-after evidence per audit event",
+  "waived": [],
+  "prompt": "Redesign /admin/audit following sijago-docs and current theme guide, retaining all functions",
+  "verification": {
+    "browserChecks": 38,
+    "api": "mocked; no log writes",
+    "build": "passed isolated production build",
+    "finishReview": "subagent ship",
+    "sloplint": "0 FAIL, 0 WARN; existing brand palette dismissed"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "scanned": "2026-10-28",
+  "scope": "app",
+  "findings": {
+    "font": "src/app/layout.tsx Plus Jakarta Sans",
+    "palette": "src/app/public-map/tokens.css SIJAGO tokens",
+    "reference": "theme guide and updated admin task navigation",
+    "requirements": "sijago-docs/PRD.md FR-6.2 through FR-6.6",
+    "wiring": "GET /agency/reports, POST status/return, existing signed Cloudinary upload and photo registration"
+  },
+  "preserve": [
+    "all ten destinations",
+    "agency and ticket selection",
+    "both status choices",
+    "date control",
+    "return reason and action",
+    "both local photo/EXIF demonstration controls"
+  ],
+  "introduce": [
+    "query/status filter",
+    "clear source/loading/empty/error states",
+    "real AFTER proof upload",
+    "actual planned date and note payloads",
+    "mobile dropdown focus and collapsible list"
+  ]
+}
