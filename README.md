@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="public/images/logo_header.svg" alt="Logo SIJAGO — Sistem Jalan Bogor" width="320" />
+  <img src="public/images/logo_header_dark.svg" alt="Logo SIJAGO — Sistem Jalan Bogor" width="320" />
 </p>
 
 # SIJAGO - Sistem Jalan Bogor
