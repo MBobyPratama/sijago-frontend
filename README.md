@@ -1,6 +1,16 @@
-# SIJAGO — Sistem Jalan Bogor
+# SIJAGO - Sistem Jalan Bogor
 
 SIJAGO adalah website pelaporan kerusakan jalan di Kota Bogor yang membantu warga mengirim laporan, melihat lokasi kerusakan, dan memantau tindak lanjut perbaikan. Admin memverifikasi dan meneruskan laporan, sedangkan instansi memperbarui perkembangan penanganan melalui dashboard.
+
+## Deployment
+
+- **FE (Vercel):** [sijago-frontend.vercel.app](https://sijago-frontend.vercel.app/)
+- **BE (Render):** [sijago-backend.onrender.com](https://sijago-backend.onrender.com)
+
+## Contributors
+
+- **Sabira Putri Cahyani**
+- **Muhammad Boby Pratama**
 
 ## Tech Stack
 
