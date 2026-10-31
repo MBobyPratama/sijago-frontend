@@ -4,7 +4,7 @@ import React, { useEffect, useState, useCallback, useRef, useMemo } from "react"
 import Link from "next/link";
 import { PublicFaq } from "@/components/layout/PublicFaq";
 import { BogorMap } from "@/components/map/BogorMap";
-import { MOCK_REPORTS, ReportItem } from "@/lib/mockData";
+import { ReportItem } from "@/lib/reportTypes";
 import { apiFetch, getClientFingerprint } from "@/lib/api";
 import { ThumbsUp, Plus, RefreshCw, MapPin, SlidersHorizontal, RotateCcw, CheckCheck, LocateFixed, ShieldCheck, ChevronRight, CircleHelp } from "lucide-react";
 import "./public-map/public-map.css";
@@ -23,9 +23,7 @@ const PUBLIC_STATUSES = new Set(Object.keys(STATUS_LABELS));
 export default function HomePage() {
   const [selectedDistrict, setSelectedDistrict] = useState("ALL");
   const [selectedCategory, setSelectedCategory] = useState("ALL");
-  const [reports, setReports] = useState<ReportItem[]>(
-    MOCK_REPORTS.filter((r) => PUBLIC_STATUSES.has(r.status))
-  );
+  const [reports, setReports] = useState<ReportItem[]>([]);
   const [upvotedIds, setUpvotedIds] = useState<Record<string, boolean>>({});
   const [isLiveDb, setIsLiveDb] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -43,7 +41,7 @@ export default function HomePage() {
       if (selectedDistrict !== "ALL") qs.set("district", selectedDistrict);
       if (selectedCategory !== "ALL") qs.set("category", selectedCategory);
 
-      const res = await apiFetch<ReportItem[]>(`/v1/public/reports?${qs.toString()}`);
+      const res = await apiFetch<ReportItem[]>(`/public/reports?${qs.toString()}`);
       if (version !== requestVersion.current) return;
       if (res.success && Array.isArray(res.data)) {
         setReports(res.data.filter((report) => PUBLIC_STATUSES.has(report.status)));
@@ -53,16 +51,8 @@ export default function HomePage() {
       }
     } catch {
       if (version !== requestVersion.current) return;
-      // Fallback ke data mock jika backend belum menyala
       setIsLiveDb(false);
-      setReports(
-        MOCK_REPORTS.filter(
-          (r) =>
-            PUBLIC_STATUSES.has(r.status) &&
-            (selectedDistrict === "ALL" || r.districtName === selectedDistrict) &&
-            (selectedCategory === "ALL" || r.category === selectedCategory)
-        )
-      );
+      setReports([]);
     } finally {
       if (version === requestVersion.current) setLoading(false);
     }
@@ -75,7 +65,7 @@ export default function HomePage() {
   const toggleUpvote = async (id: string) => {
     try {
       const res = await apiFetch<{ upvoted: boolean; upvotesCount: number }>(
-        `/v1/public/reports/${encodeURIComponent(id)}/upvote`,
+        `/public/reports/${encodeURIComponent(id)}/upvote`,
         {
           method: "POST",
           body: JSON.stringify({ fingerprint: getClientFingerprint() }),
@@ -90,14 +80,10 @@ export default function HomePage() {
         return;
       }
     } catch {
-      // Fallback local toggle
+      // No local success when the server cannot record support.
     }
 
-    const next = !upvotedIds[id];
-    setUpvotedIds((prev) => ({ ...prev, [id]: next }));
-    setReports((list) => list.map((r) =>
-      r.id === id ? { ...r, upvotes: Math.max(0, r.upvotes + (next ? 1 : -1)) } : r
-    ));
+
   };
 
   const showReportOnMap = (id: string) => {
@@ -159,9 +145,12 @@ export default function HomePage() {
                 </select>
               </label>
             </div>
+            <div className="pm-filter-actions">
+              {hasFilters && <button type="button" onClick={() => { setSelectedDistrict("ALL"); setSelectedCategory("ALL"); setSelectedStatus("ALL"); }} className="pm-text-button"><RotateCcw size={14} aria-hidden="true" />Reset filter</button>}
             <button type="button" onClick={fetchPublicReports} disabled={loading} aria-label="Perbarui laporan" title="Perbarui laporan" className="pm-icon-button">
               <RefreshCw size={17} className={loading ? "pm-spinning" : ""} aria-hidden="true" />
             </button>
+            </div>
           </div>
 
           <div className="pm-map-layout">
@@ -188,7 +177,7 @@ export default function HomePage() {
                       </div>
                       <h3><Link href={`/laporan/${rep.id}`}>{rep.title}</Link></h3>
                       <p className="pm-location"><MapPin size={14} aria-hidden="true" />{rep.districtName}<span className="pm-category">{CATEGORY_LABELS[rep.category]}</span></p>
-                      <p className={`pm-draft ${rep.draftSource === "AI" ? "pm-draft-ai" : ""}`}>{rep.permanentLabel}</p>
+
                       {rep.status === "SELESAI" && <p className="pm-monitoring">Dalam pemantauan 30 hari</p>}
                       <details className="pm-report-summary">
                         <summary>Ringkasan laporan</summary>
@@ -212,6 +201,7 @@ export default function HomePage() {
             </aside>
 
             <div className="pm-map-region" ref={mapRegionRef} tabIndex={-1} aria-label="Peta lokasi laporan">
+              <p className="pm-map-hint"><MapPin size={15} aria-hidden="true" />Pilih titik untuk melihat laporan.</p>
               <div className="pm-map-stage">
                 <BogorMap reports={sortedReports} selectedReportId={selectedReportId} onSelectReport={setSelectedReportId} resetViewKey={mapResetKey} className="pm-map-canvas" />
                 <div className="pm-map-caption"><MapPin size={16} aria-hidden="true" />Kota Bogor</div>
@@ -222,11 +212,9 @@ export default function HomePage() {
               </div>
             </div>
           </div>
-          <div className="pm-workspace-footer">
-            <p role="status" className="pm-data-status">{loading ? <RefreshCw size={15} className="pm-spinning" aria-hidden="true" /> : <CheckCheck size={16} aria-hidden="true" />}{loading ? "Memuat laporan…" : isLiveDb ? "Data laporan terbaru" : "Menampilkan data contoh"}</p>
-            {hasFilters && <button type="button" onClick={() => { setSelectedDistrict("ALL"); setSelectedCategory("ALL"); setSelectedStatus("ALL"); }} className="pm-text-button"><RotateCcw size={14} aria-hidden="true" />Reset filter</button>}
-            <p className="pm-map-hint">Pilih titik untuk melihat laporan.</p>
-          </div>
+          {(loading || !isLiveDb) && <div className="pm-workspace-footer">
+            {(loading || !isLiveDb) && <p role="status" className="pm-data-status">{loading ? <RefreshCw size={15} className="pm-spinning" aria-hidden="true" /> : <CheckCheck size={16} aria-hidden="true" />}{loading ? "Memuat laporan…" : "Laporan belum dapat dimuat. Coba perbarui."}</p>}
+          </div>}
         </section>
         <div className="pm-community-note"><CircleHelp size={19} aria-hidden="true" /><p>Sudah ada laporan di lokasi yang sama? Beri dukungan <strong>“Saya lewat sini”</strong> agar tidak perlu membuat laporan baru.</p></div>
       </div>

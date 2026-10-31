@@ -1,8 +1,10 @@
 "use client";
 
+import { PhotoPreview } from "@/components/PhotoPreview";
+
 import React, { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import Link from "next/link";
-import { MOCK_REPORTS, ReportItem } from "@/lib/mockData";
+import { ReportItem } from "@/lib/reportTypes";
 import { apiFetch } from "@/lib/api";
 import { AlertTriangle, EyeOff, GitMerge, Send, CheckCircle2, RefreshCw, X, MapPin, ShieldCheck, Search } from "lucide-react";
 import "./moderasi.css";
@@ -10,15 +12,15 @@ import "./moderasi.css";
 const AGENCY_LABELS: Record<string, { name: string; email: string }> = {
   PUPR_KOTA_BOGOR: {
     name: "Dinas PUPR Kota Bogor (Jalan Kota)",
-    email: "pupr.kotabogor@sijago.simulasi.id",
+    email: "Alamat email belum dikonfigurasi",
   },
   BINAMARGA_JABAR: {
     name: "Dinas Bina Marga Pemprov Jabar (Jalan Provinsi)",
-    email: "binamarga.jabar@sijago.simulasi.id",
+    email: "Alamat email belum dikonfigurasi",
   },
   BBPJN_NASIONAL: {
     name: "BBPJN DKI Jakarta - Jawa Barat (Jalan Nasional)",
-    email: "bbpjn.nasional@sijago.simulasi.id",
+    email: "Alamat email belum dikonfigurasi",
   },
 };
 
@@ -28,6 +30,7 @@ type QueueReport = Omit<ReportItem, "status"> & {
   adminNotes?: string[];
   assignedAgencyCode?: string;
   returnedByAgency?: boolean;
+  canCancelVerification?: boolean;
   returnReason?: string;
 };
 const STATUS_LABELS: Record<string,string> = {
@@ -36,8 +39,8 @@ const STATUS_LABELS: Record<string,string> = {
 const cleanLabel = (text: string) => text.replace(/^[^\p{L}\p{N}\[]+/u, "");
 
 export default function AdminModerasiPage() {
-  const [reports, setReports] = useState<QueueReport[]>(MOCK_REPORTS);
-  const [selectedId, setSelectedId] = useState(MOCK_REPORTS[2].id);
+  const [reports, setReports] = useState<QueueReport[]>([]);
+  const [selectedId, setSelectedId] = useState("");
   const [isLiveDb, setIsLiveDb] = useState(false);
   const [loading, setLoading] = useState(true);
   const [queueError, setQueueError] = useState<string | null>(null);
@@ -45,10 +48,14 @@ export default function AdminModerasiPage() {
   const [adminNote, setAdminNote] = useState("");
   const [isBlurred, setIsBlurred] = useState(false);
   const [showEmailModal, setShowEmailModal] = useState(false);
+  const [cancelReason, setCancelReason] = useState("");
+  const [cancelError, setCancelError] = useState<string | null>(null);
+  const cancelDialog = useRef<HTMLDialogElement>(null);
+  const cancelTrigger = useRef<HTMLButtonElement>(null);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
   const [messageError, setMessageError] = useState(false);
   const [rejectReason, setRejectReason] = useState("");
-  const [mergeMasterCode, setMergeMasterCode] = useState("SJG-2026-1042");
+  const [mergeMasterCode, setMergeMasterCode] = useState("");
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [query, setQuery] = useState("");
   const [sortOrder, setSortOrder] = useState("PRIORITY");
@@ -87,6 +94,9 @@ export default function AdminModerasiPage() {
     setAdminNote(selectedReport?.adminNotes?.[0] || "");
     setIsBlurred(selectedReport?.photos?.some(photo => photo.isBlurredByAdmin) || false);
     setSelectedAgency(selectedReport?.assignedAgencyCode && AGENCY_LABELS[selectedReport.assignedAgencyCode] ? selectedReport.assignedAgencyCode : "PUPR_KOTA_BOGOR");
+    cancelDialog.current?.close();
+    setCancelReason("");
+    setCancelError(null);
     setRejectReason("");
     setToastMsg(null);
   // Notes and routing are local to the selected report; refresh does not erase an unsaved note.
@@ -118,7 +128,7 @@ export default function AdminModerasiPage() {
   const notify = (message: string, error = false) => { setToastMsg(message); setMessageError(error); };
   const runAction = async <T,>(action: string, endpoint: string, body: object, onSuccess: (data?: T) => void) => {
     if (!selectedReport || busyRef.current || loading) return;
-    if (!isLiveDb) { notify("Mode contoh: tidak ada perubahan yang disimpan dan tidak ada email yang dikirim. Segarkan antrean untuk menghubungkan server.", true); return; }
+    if (!isLiveDb) { notify("Server belum terhubung. Segarkan antrean sebelum melakukan tindakan.", true); return; }
     busyRef.current = true; setBusy(action); setToastMsg(null);
     try {
       const res = await apiFetch<T>(`/admin/reports/${encodeURIComponent(selectedReport.id)}/${endpoint}`, { method: "POST", body: JSON.stringify(body) });
@@ -129,6 +139,15 @@ export default function AdminModerasiPage() {
     finally { busyRef.current = false; setBusy(null); }
   };
   const handleVerifyReport = async () => runAction("verify", "verify", {adminNote}, () => notify(`Laporan ${selectedReport?.ticketCode} terverifikasi dan dapat tampil di peta publik.`));
+  const handleCancelVerification = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!cancelReason.trim()) { setCancelError("Isi alasan pembatalan verifikasi."); return; }
+    await runAction("cancel-verification", "cancel-verification", { reason: cancelReason.trim() }, () => {
+      cancelDialog.current?.close();
+      setCancelReason("");
+      notify("Verifikasi dibatalkan. Laporan kembali menunggu verifikasi dan tidak ditampilkan di peta publik.");
+    });
+  };
   const handleMergeDuplicate = async () => {
     if (!selectedReport || !mergeMasterCode.trim()) { notify("Isi kode tiket induk terlebih dahulu.", true); return; }
     if (mergeMasterCode.trim().toUpperCase() === selectedReport.ticketCode.toUpperCase()) { notify("Tiket induk harus berbeda dari laporan yang dipilih.", true); return; }
@@ -147,7 +166,7 @@ export default function AdminModerasiPage() {
   };
   const handleEscalateEmail = async () => runAction<{status:string;agencyName:string;sentViaResend:boolean;messageId:string}>("escalate", "escalate", {agencyCode:selectedAgency,adminNote}, data => {
     if (!data) throw new Error("Server belum mengembalikan hasil pengiriman. Periksa antrean sebelum mencoba kembali.");
-    notify(data.sentViaResend ? `Email dikirim ke ${data.agencyName}. ID: ${data.messageId}.` : `Server menjalankan simulasi pengiriman ke ${data.agencyName}. Email asli tidak dikirim. ID: ${data.messageId}.`);
+    notify(data.sentViaResend ? `Email dikirim ke ${data.agencyName}. ID: ${data.messageId}.` : `Email ke ${data.agencyName} belum berhasil dikirim.`);
     setShowEmailModal(false);
   });
   const photos = selectedReport?.photos?.filter(photo => photo.kind === "REPORT" || photo.kind === "BEFORE") || [];
@@ -157,8 +176,8 @@ export default function AdminModerasiPage() {
     <main className="moderation-page">
       <div className="moderation-container">
         <header className="moderation-heading"><div><h1>Moderasi laporan</h1><p>Periksa laporan warga sebelum dipublikasikan dan diteruskan ke instansi.</p></div><button type="button" onClick={fetchAdminQueue} disabled={disabled} className="mod-button"><RefreshCw size={16} aria-hidden="true" />{loading ? "Memuat antrean…" : "Segarkan antrean"}</button></header>
-        <div className="mod-context"><span role="status" className={isLiveDb && !queueError?"mod-source-live":"mod-source-demo"}>{queueError && isLiveDb ? "Data terakhir, koneksi gagal" : isLiveDb?"Terhubung ke server":"Data contoh"}</span><span>Target verifikasi ≤ 2 hari kerja</span><span><ShieldCheck size={16} aria-hidden="true" />Fakta Asal warga tidak dapat diubah admin.</span></div>
-        {queueError && <div role="alert" className="mod-notice mod-warning"><AlertTriangle size={18} aria-hidden="true" /><p>{queueError} {isLiveDb ? "Data terakhir tetap ditampilkan. Segarkan untuk mencoba kembali." : "Menampilkan contoh laporan; tindakan tidak disimpan."}</p></div>}
+        <div className="mod-context"><span role="status" className={isLiveDb && !queueError?"mod-source-live":"mod-source-demo"}>{queueError && isLiveDb ? "Data terakhir, koneksi gagal" : isLiveDb?"Terhubung ke server":"Belum terhubung"}</span><span>Target verifikasi ≤ 2 hari kerja</span><span><ShieldCheck size={16} aria-hidden="true" />Fakta Asal warga tidak dapat diubah admin.</span></div>
+        {queueError && <div role="alert" className="mod-notice mod-warning"><AlertTriangle size={18} aria-hidden="true" /><p>{queueError} {isLiveDb ? "Data terakhir tetap ditampilkan. Segarkan untuk mencoba kembali." : "Antrean belum dapat dimuat."}</p></div>}
         {toastMsg && <div role={messageError?"alert":"status"} className={`mod-notice ${messageError?"mod-error":"mod-success"}`}><p>{toastMsg}</p><button type="button" onClick={() => setToastMsg(null)} className="mod-dismiss">Tutup</button></div>}
 
         <div className="mod-workspace">
@@ -170,17 +189,26 @@ export default function AdminModerasiPage() {
 
           <section className="mod-inspection" aria-label="Pemeriksaan laporan" aria-busy={loading}>
             {loading ? <div className="mod-loading"><span className="mod-skeleton" /><span className="mod-skeleton" /><p>Menyiapkan detail pemeriksaan…</p></div> : !selectedReport ? <div className="mod-empty"><h2>Pilih laporan untuk diperiksa</h2><p>Detail dan tindakan moderasi akan muncul di sini.</p></div> : <>
-              <header className="mod-detail-heading"><a href="#queue-heading" className="mod-back-queue">Kembali ke antrean</a><div className="mod-detail-meta"><span>{selectedReport.ticketCode}</span><span className={`mod-status mod-status-${selectedReport.status}`} role="status">{STATUS_LABELS[selectedReport.status] || selectedReport.status}</span></div><h2 id="inspection-heading" tabIndex={-1}>{selectedReport.title}</h2><span className="mod-draft">{cleanLabel(selectedReport.permanentLabel)}</span></header>
+              <header className="mod-detail-heading"><a href="#queue-heading" className="mod-back-queue">Kembali ke antrean</a><div className="mod-detail-meta"><span>{selectedReport.ticketCode}</span><span className={`mod-status mod-status-${selectedReport.status}`} role="status">{STATUS_LABELS[selectedReport.status] || selectedReport.status}</span></div><h2 id="inspection-heading" tabIndex={-1}>{selectedReport.title}</h2>{selectedReport.draftSource === "AI" && <span className="mod-draft">{cleanLabel(selectedReport.permanentLabel)}</span>}</header>
               {selectedReport.returnedByAgency && <div className="mod-notice mod-warning"><p><strong>Dikembalikan instansi.</strong> {selectedReport.returnReason || "Periksa kembali kewenangan dan tujuan penerusan."}</p></div>}
               <details className="mod-section mod-facts-disclosure"><summary>Fakta laporan dan draf</summary><p>{selectedReport.body}</p><dl className="mod-facts"><div><dt>Lokasi</dt><dd>{selectedReport.districtName}, {selectedReport.subdistrictName}</dd></div><div><dt>Kategori & ukuran</dt><dd>{selectedReport.category.replaceAll("_"," ").toLowerCase()} ({selectedReport.dimensionsCm})</dd></div><div><dt>Koordinat</dt><dd>{selectedReport.lat}, {selectedReport.lng}</dd></div><div><dt>Dukungan warga</dt><dd>{selectedReport.upvotes}</dd></div></dl></details>
-              <section className="mod-section" aria-labelledby="evidence-heading"><h3 id="evidence-heading">Bukti foto dan lokasi</h3><div className="mod-evidence"><figure><figcaption>Foto yang tersedia dari laporan</figcaption>{photos.length ? photos.map(photo=><a key={photo.id} href={photo.publicUrl} target="_blank" rel="noopener noreferrer"><img src={photo.publicUrl} alt="Bukti kondisi jalan yang dilaporkan" /></a>) : <p className="mod-photo-empty">Belum ada foto yang dapat ditampilkan.</p>}<button type="button" onClick={handleToggleBlur} disabled={disabled} aria-pressed={isBlurred} className="mod-button"><EyeOff size={16} aria-hidden="true" />{busy==="blur"?"Memproses…":isBlurred?"Nonaktifkan blur publik":"Aktifkan blur publik"}</button><p className="mod-helper">Foto asli tetap terbatas untuk admin. Tampilan ini memakai URL foto yang disediakan API.</p></figure><div><dl className="mod-location-facts"><div><dt>Sumber titik</dt><dd>{selectedReport.locationSource} (±{selectedReport.gpsAccuracyMeters} m)</dd></div><div><dt>Selisih GPS dan EXIF</dt><dd>{selectedReport.exifDistanceMeters} meter</dd></div><div><dt>Patokan warga</dt><dd>{selectedReport.landmark}</dd></div></dl><div className={`mod-location-check ${selectedReport.exifMismatchFlag?"mod-warning":"mod-success"}`}><AlertTriangle size={16} aria-hidden="true" /><p>{selectedReport.exifMismatchFlag?"Jarak EXIF foto lebih dari 100 m dari pin laporan. Periksa kesesuaian patokan sebelum verifikasi.":"Lokasi EXIF foto konsisten dengan titik GPS laporan."}</p></div></div></div></section>
-              <section className="mod-section" aria-labelledby="decision-heading"><div className="mod-decision-heading"><h3 id="decision-heading">Catatan dan keputusan</h3><button type="button" onClick={handleVerifyReport} disabled={disabled} className="mod-button mod-primary"><CheckCircle2 size={17} aria-hidden="true" />{busy==="verify"?"Memverifikasi…":"Verifikasi laporan"}</button></div><div className="mod-field"><label htmlFor="admin-note">Catatan koreksi admin</label><textarea id="admin-note" rows={2} value={adminNote} onChange={(e) => setAdminNote(e.target.value)} disabled={disabled} aria-describedby="admin-note-help" /><p id="admin-note-help" className="mod-helper">Disimpan terpisah di admin_notes, tanpa mengubah Fakta Asal warga (BRL-08).</p></div><div className="mod-secondary-actions"><div className="mod-field"><label htmlFor="merge-master">Kode tiket induk</label><div className="mod-inline-control"><input id="merge-master" type="text" value={mergeMasterCode} onChange={(e) => setMergeMasterCode(e.target.value)} title="Kode Tiket Induk" disabled={disabled} /><button type="button" onClick={handleMergeDuplicate} disabled={disabled} className="mod-button"><GitMerge size={16} aria-hidden="true" />Gabung</button></div></div><div className="mod-field"><label htmlFor="reject-reason">Alasan penolakan (wajib)</label><select id="reject-reason" value={rejectReason} onChange={e=>setRejectReason(e.target.value)} disabled={disabled}><option value="">Pilih alasan</option><option value="SPAM">Spam / Foto Tidak Relevan</option><option value="PII_SARA">Memuat Tuduhan / PII Pihak Lain</option><option value="OUTSIDE_SCOPE">Bukan Infrastruktur Jalan</option></select><button type="button" className="mod-button mod-danger" disabled={disabled || !rejectReason} onClick={()=>handleRejectReport(rejectReason)}>Tolak laporan</button></div></div></section>
+              <section className="mod-section" aria-labelledby="evidence-heading"><h3 id="evidence-heading">Bukti foto dan lokasi</h3><div className="mod-evidence"><figure><figcaption>Foto yang tersedia dari laporan</figcaption>{photos.length ? photos.map((photo, index)=><PhotoPreview key={photo.id} photos={photos} index={index}><img src={photo.publicUrl} alt="Bukti kondisi jalan yang dilaporkan" /></PhotoPreview>) : <p className="mod-photo-empty">Belum ada foto yang dapat ditampilkan.</p>}<button type="button" onClick={handleToggleBlur} disabled={disabled} aria-pressed={isBlurred} className="mod-button"><EyeOff size={16} aria-hidden="true" />{busy==="blur"?"Memproses…":isBlurred?"Nonaktifkan blur publik":"Aktifkan blur publik"}</button><p className="mod-helper">Foto asli tetap terbatas untuk admin. Tampilan ini memakai URL foto yang disediakan API.</p></figure><div><dl className="mod-location-facts"><div><dt>Sumber titik</dt><dd>{selectedReport.locationSource}{selectedReport.gpsAccuracyMeters != null ? ` (±${selectedReport.gpsAccuracyMeters} m)` : ""}</dd></div><div><dt>Selisih GPS dan EXIF</dt><dd>{selectedReport.exifDistanceMeters != null ? `${selectedReport.exifDistanceMeters} meter` : "Metadata EXIF tidak tersedia"}</dd></div><div><dt>Patokan warga</dt><dd>{selectedReport.landmark}</dd></div></dl><div className={`mod-location-check ${selectedReport.exifMismatchFlag?"mod-warning":"mod-success"}`}><AlertTriangle size={16} aria-hidden="true" /><p>{selectedReport.exifDistanceMeters == null ? "Kesesuaian EXIF belum dapat diperiksa karena metadata tidak tersedia." : selectedReport.exifMismatchFlag?"Jarak EXIF foto lebih dari 100 m dari pin laporan. Periksa kesesuaian patokan sebelum verifikasi.":"Lokasi EXIF foto konsisten dengan titik GPS laporan."}</p></div></div></div></section>
+              <section className="mod-section" aria-labelledby="decision-heading"><div className="mod-decision-heading"><h3 id="decision-heading">Catatan dan keputusan</h3>{selectedReport.status === "MENUNGGU_VERIFIKASI" ? <button type="button" onClick={handleVerifyReport} disabled={disabled} className="mod-button mod-primary"><CheckCircle2 size={17} aria-hidden="true" />{busy==="verify"?"Memverifikasi…":"Verifikasi laporan"}</button> : selectedReport.canCancelVerification ? <button ref={cancelTrigger} type="button" className="mod-button" disabled={disabled} onClick={() => { setCancelReason(""); setCancelError(null); setToastMsg(null); cancelDialog.current?.showModal(); }}>Batalkan verifikasi</button> : null}</div><div className="mod-field"><label htmlFor="admin-note">Catatan koreksi admin</label><textarea id="admin-note" rows={2} value={adminNote} onChange={(e) => setAdminNote(e.target.value)} disabled={disabled} aria-describedby="admin-note-help" /><p id="admin-note-help" className="mod-helper">Disimpan terpisah di admin_notes, tanpa mengubah Fakta Asal warga (BRL-08).</p></div><div className="mod-secondary-actions"><div className="mod-field"><label htmlFor="merge-master">Kode tiket induk</label><div className="mod-inline-control"><input id="merge-master" type="text" value={mergeMasterCode} onChange={(e) => setMergeMasterCode(e.target.value)} title="Kode Tiket Induk" disabled={disabled} /><button type="button" onClick={handleMergeDuplicate} disabled={disabled} className="mod-button"><GitMerge size={16} aria-hidden="true" />Gabung</button></div></div><div className="mod-field"><label htmlFor="reject-reason">Alasan penolakan (wajib)</label><select id="reject-reason" value={rejectReason} onChange={e=>setRejectReason(e.target.value)} disabled={disabled}><option value="">Pilih alasan</option><option value="SPAM">Spam / Foto Tidak Relevan</option><option value="PII_SARA">Memuat Tuduhan / PII Pihak Lain</option><option value="OUTSIDE_SCOPE">Bukan Infrastruktur Jalan</option></select><button type="button" className="mod-button mod-danger" disabled={disabled || !rejectReason} onClick={()=>handleRejectReport(rejectReason)}>Tolak laporan</button></div></div></section>
               <section className="mod-section mod-routing" aria-labelledby="routing-heading"><h3 id="routing-heading">Teruskan ke instansi</h3><p>Petunjuk ruas: Jalan Kota. Keputusan tujuan tetap pada admin.</p><div className="mod-field"><label htmlFor="selected-agency">Instansi berwenang</label><select id="selected-agency" value={selectedAgency} onChange={(e) => setSelectedAgency(e.target.value)} disabled={disabled}>{Object.entries(AGENCY_LABELS).map(([code,agency])=><option value={code} key={code}>{agency.name}</option>)}</select></div><button type="button" onClick={() => { dialogTrigger.current = document.activeElement as HTMLElement; setShowEmailModal(true); }} disabled={disabled} className="mod-button"><Send size={16} aria-hidden="true" />Pratinjau email</button><p className="mod-helper">Email resmi dikirim hanya setelah konfirmasi admin pada pratinjau.</p></section>
             </>}
           </section>
         </div>
       </div>
-      {showEmailModal && selectedReport && <div className="mod-modal-overlay"><div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="email-heading" className="mod-modal"><div className="mod-modal-heading"><h2 id="email-heading">Pratinjau email ke instansi</h2><button type="button" autoFocus onClick={() => setShowEmailModal(false)} disabled={Boolean(busy)} className="mod-close" aria-label="Tutup pratinjau"><X size={20} aria-hidden="true" /></button></div><dl className="mod-email-meta"><div><dt>Penerima resmi</dt><dd>{AGENCY_LABELS[selectedAgency].name}<br />{AGENCY_LABELS[selectedAgency].email}</dd></div><div><dt>Subjek</dt><dd>[ESKALASI SIJAGO {selectedReport.ticketCode}] {selectedReport.title}</dd></div></dl><div className="mod-email-body"><span className="mod-draft">Label sumber teks: {cleanLabel(selectedReport.permanentLabel)}</span><p>{selectedReport.body}</p><p>Koordinat: {selectedReport.lat}, {selectedReport.lng} ({selectedReport.districtName})</p><p>Catatan admin: {adminNote || "Tidak ada catatan tambahan."}</p><p>Privasi Pelapor: Identitas pelapor disembunyikan sesuai aturan BRL-14.</p></div><p className="mod-notice mod-warning"><strong>Konfirmasi Kendali Manusia (BRL-06):</strong> Dengan menekan tombol di bawah, sistem akan mengirim email melalui Resend dan mencatat aksi atas nama akun Admin Anda di <code>report_audit_logs</code>. Jika server memakai mode simulasi, email asli tidak dikirim; hasil pengiriman akan ditandai setelah konfirmasi.</p>{toastMsg && messageError && <p role="alert" className="mod-notice mod-error">{toastMsg}</p>}<div className="mod-modal-actions"><button type="button" onClick={() => setShowEmailModal(false)} disabled={Boolean(busy)} className="mod-button">Batal</button><button type="button" onClick={handleEscalateEmail} disabled={Boolean(busy)} className="mod-button mod-primary"><Send size={16} aria-hidden="true" />{busy==="escalate"?"Mengirim email…":"Konfirmasi & kirim"}</button></div></div></div>}
+      <dialog ref={cancelDialog} className="mod-modal mod-cancel-dialog" aria-labelledby="cancel-verification-heading" aria-describedby="cancel-verification-help" onCancel={event => { if (busyRef.current) event.preventDefault(); }} onClose={() => cancelTrigger.current?.focus()}>
+        <form onSubmit={handleCancelVerification}>
+          <div className="mod-modal-heading"><h2 id="cancel-verification-heading">Batalkan verifikasi?</h2><button type="button" className="mod-close" aria-label="Tutup pembatalan verifikasi" disabled={Boolean(busy)} onClick={() => cancelDialog.current?.close()}><X size={20} aria-hidden="true" /></button></div>
+          <p id="cancel-verification-help">Laporan {selectedReport?.ticketCode} akan kembali menunggu verifikasi dan tidak ditampilkan di peta publik. Alasan pembatalan disimpan dalam catatan admin dan riwayat audit.</p>
+          <div className="mod-field"><label htmlFor="cancel-verification-reason">Alasan pembatalan (wajib)</label><textarea id="cancel-verification-reason" autoFocus required maxLength={2000} rows={4} value={cancelReason} onChange={event => { setCancelReason(event.target.value); setCancelError(null); }} disabled={Boolean(busy)} aria-invalid={Boolean(cancelError)} /></div>
+          {(cancelError || (messageError && toastMsg)) && <p role="alert" className="mod-notice mod-error">{cancelError || toastMsg}</p>}
+          <div className="mod-modal-actions"><button type="button" className="mod-button" disabled={Boolean(busy)} onClick={() => cancelDialog.current?.close()}>Kembali</button><button type="submit" className="mod-button mod-danger" disabled={disabled || !cancelReason.trim()}>{busy === "cancel-verification" ? "Membatalkan…" : "Ya, batalkan verifikasi"}</button></div>
+        </form>
+      </dialog>
+      {showEmailModal && selectedReport && <div className="mod-modal-overlay"><div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="email-heading" className="mod-modal"><div className="mod-modal-heading"><h2 id="email-heading">Pratinjau email ke instansi</h2><button type="button" autoFocus onClick={() => setShowEmailModal(false)} disabled={Boolean(busy)} className="mod-close" aria-label="Tutup pratinjau"><X size={20} aria-hidden="true" /></button></div><dl className="mod-email-meta"><div><dt>Penerima resmi</dt><dd>{AGENCY_LABELS[selectedAgency].name}<br />{AGENCY_LABELS[selectedAgency].email}</dd></div><div><dt>Subjek</dt><dd>[ESKALASI SIJAGO {selectedReport.ticketCode}] {selectedReport.title}</dd></div></dl><div className="mod-email-body">{selectedReport.draftSource === "AI" && <span className="mod-draft">Label sumber teks: {cleanLabel(selectedReport.permanentLabel)}</span>}<p>{selectedReport.body}</p><p>Koordinat: {selectedReport.lat}, {selectedReport.lng} ({selectedReport.districtName})</p><p>Catatan admin: {adminNote || "Tidak ada catatan tambahan."}</p><p>Privasi Pelapor: Identitas pelapor disembunyikan sesuai aturan BRL-14.</p></div><p className="mod-notice mod-warning"><strong>Konfirmasi Kendali Manusia (BRL-06):</strong> Dengan menekan tombol di bawah, sistem akan mengirim email melalui Resend dan mencatat aksi atas nama akun Admin Anda di <code>report_audit_logs</code>. Pengiriman memerlukan layanan email dan alamat instansi yang telah dikonfigurasi.</p>{toastMsg && messageError && <p role="alert" className="mod-notice mod-error">{toastMsg}</p>}<div className="mod-modal-actions"><button type="button" onClick={() => setShowEmailModal(false)} disabled={Boolean(busy)} className="mod-button">Batal</button><button type="button" onClick={handleEscalateEmail} disabled={Boolean(busy)} className="mod-button mod-primary"><Send size={16} aria-hidden="true" />{busy==="escalate"?"Mengirim email…":"Konfirmasi & kirim"}</button></div></div></div>}
     </main>
   );
 }

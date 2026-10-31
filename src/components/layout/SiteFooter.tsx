@@ -18,6 +18,7 @@ export function SiteFooter() {
             <Link href="/">Peta publik</Link>
             <Link href="/lacak">Lacak laporan</Link>
             <Link href="/lapor">Lapor jalan rusak</Link>
+            <Link href="/login">Masuk admin &amp; instansi</Link>
           </nav>
         </div>
         <div className="site-footer-bottom">

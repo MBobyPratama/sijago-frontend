@@ -4,7 +4,9 @@ import React, { useEffect, useRef } from "react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { publicEnv } from "@/lib/env";
-import { MOCK_REPORTS, ReportItem, STATUS_BADGE_MAP } from "@/lib/mockData";
+import { ReportItem, STATUS_BADGE_MAP } from "@/lib/reportTypes";
+
+const EMPTY_REPORTS: ReportItem[] = [];
 
 interface BogorMapProps {
   centerLat?: number;
@@ -16,6 +18,7 @@ interface BogorMapProps {
   selectedReportId?: string | null;
   onSelectReport?: (id: string) => void;
   resetViewKey?: number;
+  onLocationChange?: (lat: number, lng: number) => void;
 }
 
 /**
@@ -28,10 +31,11 @@ export function BogorMap({
   zoom = publicEnv.defaultMapZoom,
   className = "w-full h-[380px] rounded-xl border border-slate-200 shadow-sm overflow-hidden",
   showHotspotZones = false,
-  reports = MOCK_REPORTS,
+  reports = EMPTY_REPORTS,
   selectedReportId,
   onSelectReport,
   resetViewKey = 0,
+  onLocationChange,
 }: BogorMapProps) {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapInstanceRef = useRef<maplibregl.Map | null>(null);
@@ -40,6 +44,11 @@ export function BogorMap({
   selectionCallbackRef.current = onSelectReport;
   const selectedReportRef = useRef(selectedReportId);
   selectedReportRef.current = selectedReportId;
+  const locationCallbackRef = useRef(onLocationChange);
+  locationCallbackRef.current = onLocationChange;
+  const locationMarkerRef = useRef<maplibregl.Marker | null>(null);
+  const initialView = useRef({ centerLat, centerLng, zoom });
+  const pickingLocation = Boolean(onLocationChange);
 
   useEffect(() => {
     if (!mapContainerRef.current || mapInstanceRef.current) return;
@@ -47,52 +56,36 @@ export function BogorMap({
     const map = new maplibregl.Map({
       container: mapContainerRef.current,
       style: publicEnv.mapStyleUrl,
-      center: [centerLng, centerLat],
-      zoom,
+      center: [initialView.current.centerLng, initialView.current.centerLat],
+      zoom: initialView.current.zoom,
     });
 
     map.addControl(new maplibregl.NavigationControl(), "top-right");
 
-    if (showHotspotZones) {
-      map.on("load", () => {
-        map.addSource("bogor-redzones", {
-          type: "geojson",
-          data: {
-            type: "FeatureCollection",
-            features: [
-              {
-                type: "Feature",
-                properties: { name: "Zona Merah Bogor Tengah (Curah Hujan 82.5 mm)" },
-                geometry: {
-                  type: "Point",
-                  coordinates: [106.806039, -6.597147],
-                },
-              },
-              {
-                type: "Feature",
-                properties: { name: "Zona Merah Tanah Sareal (Curah Hujan 76.0 mm)" },
-                geometry: {
-                  type: "Point",
-                  coordinates: [106.7815, -6.5612],
-                },
-              },
-            ],
-          },
-        });
-
-        map.addLayer({
-          id: "redzone-circles",
-          type: "circle",
-          source: "bogor-redzones",
-          paint: {
-            "circle-radius": 48,
-            "circle-color": "#DC2626",
-            "circle-opacity": 0.22,
-            "circle-stroke-width": 2,
-            "circle-stroke-color": "#DC2626",
-          },
-        });
+    if (pickingLocation) {
+      const marker = new maplibregl.Marker({ draggable: true })
+        .setLngLat([initialView.current.centerLng, initialView.current.centerLat]).addTo(map);
+      locationMarkerRef.current = marker;
+      const commit = (point: maplibregl.LngLat) => {
+        marker.setLngLat(point);
+        locationCallbackRef.current?.(Number(point.lat.toFixed(6)), Number(point.wrap().lng.toFixed(6)));
+      };
+      map.on("click", (event) => commit(event.lngLat));
+      marker.on("dragend", () => commit(marker.getLngLat()));
+      const element = marker.getElement();
+      element.setAttribute("tabindex", "0");
+      element.setAttribute("role", "button");
+      element.setAttribute("aria-label", "Lokasi kerusakan. Geser pin atau gunakan tombol panah untuk memindahkan titik.");
+      element.addEventListener("keydown", (event) => {
+        const directions: Record<string, [number, number]> = { ArrowUp: [0, -10], ArrowDown: [0, 10], ArrowLeft: [-10, 0], ArrowRight: [10, 0] };
+        const delta = directions[event.key];
+        if (!delta) return;
+        event.preventDefault();
+        event.stopPropagation();
+        const pixel = map.project(marker.getLngLat());
+        commit(map.unproject([pixel.x + delta[0], pixel.y + delta[1]]));
       });
+      map.getCanvas().style.cursor = "crosshair";
     }
 
     mapInstanceRef.current = map;
@@ -100,8 +93,18 @@ export function BogorMap({
     return () => {
       map.remove();
       mapInstanceRef.current = null;
+      locationMarkerRef.current = null;
     };
-  }, [centerLat, centerLng, zoom, showHotspotZones]);
+  }, [showHotspotZones, pickingLocation]);
+
+  useEffect(() => {
+    const map = mapInstanceRef.current;
+    if (!map) return;
+    locationMarkerRef.current?.setLngLat([centerLng, centerLat]);
+    if (pickingLocation) {
+      if (!map.getBounds().contains([centerLng, centerLat])) map.jumpTo({ center: [centerLng, centerLat] });
+    } else if (!onSelectReport) map.jumpTo({ center: [centerLng, centerLat], zoom });
+  }, [centerLat, centerLng, zoom, pickingLocation, onSelectReport]);
 
   useEffect(() => {
     const map = mapInstanceRef.current;
@@ -119,14 +122,13 @@ export function BogorMap({
       heading.textContent = rep.title;
       const location = document.createElement("p");
       location.textContent = `${rep.ticketCode}, ${rep.districtName}`;
-      const draft = document.createElement("p");
-      draft.textContent = rep.permanentLabel;
       const support = document.createElement("p");
       support.textContent = `${rep.upvotes} dukungan`;
       const link = document.createElement("a");
       link.href = `/laporan/${encodeURIComponent(rep.id)}`;
       link.textContent = "Buka detail laporan";
-      popupContent.append(heading, location, draft, support, link);
+      popupContent.append(heading, location);
+      popupContent.append(support, link);
 
       const marker = new maplibregl.Marker({ color: badge.dotColor })
         .setLngLat([rep.lng, rep.lat])

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Plus } from "lucide-react";
 import "./public-faq.css";
 
@@ -9,6 +10,7 @@ export function PublicFaq() {
         <div className="public-faq-intro">
           <h2 id="faq-heading">Pertanyaan yang sering diajukan</h2>
           <p>Kenali cara melapor dan memantau perbaikan jalan melalui SIJAGO.</p>
+          <Image src="/images/sijago_pose_menyapa.svg" alt="" width={462} height={445} className="public-faq-mascot" />
         </div>
         <div className="public-faq-list">
           <details>

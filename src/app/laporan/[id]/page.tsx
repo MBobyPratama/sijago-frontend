@@ -1,9 +1,11 @@
 "use client";
 
+import { PhotoPreview } from "@/components/PhotoPreview";
+
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { MOCK_REPORTS, ReportItem, STATUS_BADGE_MAP } from "@/lib/mockData";
+import { ReportItem, STATUS_BADGE_MAP } from "@/lib/reportTypes";
 import { BogorMap } from "@/components/map/BogorMap";
 import { apiFetch, getClientFingerprint } from "@/lib/api";
 import {
@@ -34,11 +36,25 @@ const cleanLabel = (value: string) => value.replace(/^[^\p{L}\p{N}\[]+/u, "");
 
 export default function DetailLaporanPage() {
   const params = useParams<{ id: string }>();
-  const reportId = params?.id || "rep-1042";
+  const reportId = params?.id || "";
+  const [report, setReport] = useState<DetailReport | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  useEffect(() => {
+    let current = true;
+    setReport(null); setError(null);
+    apiFetch<DetailReport>(`/public/reports/${encodeURIComponent(reportId)}`).then(res => {
+      if (!current) return;
+      if (res.success && res.data) setReport(res.data);
+      else setError(res.error?.detail || "Laporan tidak ditemukan.");
+    }).catch(() => { if (current) setError("Laporan belum dapat dimuat. Periksa koneksi lalu coba lagi."); });
+    return () => { current = false; };
+  }, [reportId]);
+  if (!report) return <main className="report-detail"><div className="detail-container"><Link href="/" className="detail-back">Kembali ke peta</Link><h1>{error ? "Laporan belum tersedia" : "Memuat laporan…"}</h1><p role={error ? "alert" : "status"}>{error || "Mengambil data laporan dari server."}</p></div></main>;
+  return <LoadedReportDetail key={reportId} initialReport={report} reportId={reportId} />;
+}
 
-  const [report, setReport] = useState<DetailReport>(
-    MOCK_REPORTS.find((r) => r.id === reportId || r.ticketCode === reportId) || MOCK_REPORTS[0]
-  );
+function LoadedReportDetail({ initialReport, reportId }: { initialReport: DetailReport; reportId: string }) {
+  const [report, setReport] = useState<DetailReport>(initialReport);
   const [upvoted, setUpvoted] = useState(false);
 
   // OTP Modal & Verification state
@@ -65,7 +81,7 @@ export default function DetailLaporanPage() {
   }, [showOtpModal]);
   const [otpVerified, setOtpVerified] = useState(false);
   const [otpToken, setOtpToken] = useState<string | null>(null);
-  const [otpEmail, setOtpEmail] = useState("warga.bogor@example.com");
+  const [otpEmail, setOtpEmail] = useState("");
   const [otpCode, setOtpCode] = useState("");
   const [otpStatusMsg, setOtpStatusMsg] = useState<string | null>(null);
   const [otpLoading, setOtpLoading] = useState(false);
@@ -117,7 +133,7 @@ export default function DetailLaporanPage() {
     } catch {
       // Fallback
     }
-    setUpvoted((v) => !v);
+
   };
 
   const handleRequestOtp = async () => {
@@ -133,22 +149,12 @@ export default function DetailLaporanPage() {
         body: JSON.stringify({ email: otpEmail, purpose: "PUBLIC_COMMUNITY_ACTION" }),
       });
       if (res.success && res.data) {
-        if (res.data.devOtpCode) {
-          setOtpCode(res.data.devOtpCode);
-          setOtpStatusMsg(
-            res.data.sentViaResend
-              ? `Kode OTP telah dikirim via Resend ke ${otpEmail} (Kode diisi otomatis untuk kemudahan uji coba: ${res.data.devOtpCode}).`
-              : `Mode Simulasi Resend: Kode OTP 6 digit Anda adalah ${res.data.devOtpCode}.`
-          );
-        } else {
-          setOtpStatusMsg(`Kode OTP 6 digit telah dikirim via Resend ke ${otpEmail}.`);
-        }
+        setOtpStatusMsg(`Kode verifikasi telah dikirim ke ${otpEmail}. Periksa kotak masuk Anda.`);
       } else {
         setOtpStatusMsg(res.error?.detail || "Gagal meminta OTP.");
       }
     } catch {
-      setOtpCode("849201");
-      setOtpStatusMsg("Mode Offline Fallback: Gunakan kode 849201.");
+      setOtpStatusMsg("Kode verifikasi belum dapat dikirim. Silakan coba lagi.");
     } finally {
       setOtpLoading(false);
     }
@@ -173,9 +179,7 @@ export default function DetailLaporanPage() {
       }
       setOtpStatusMsg(res.error?.detail || "Kode OTP tidak valid.");
     } catch {
-      setOtpVerified(true);
-      setOtpToken("sim-otp-token");
-      setShowOtpModal(false);
+      setOtpStatusMsg("Verifikasi gagal terhubung ke server. Silakan coba lagi.");
     } finally {
       setOtpLoading(false);
     }
@@ -204,7 +208,7 @@ export default function DetailLaporanPage() {
       }
       setTagStatusMsg(res.error?.detail || "Tag sudah pernah Anda tambahkan.");
     } catch {
-      setTagStatusMsg("✓ Tag kondisi ditambahkan (mode simulasi).");
+      setTagStatusMsg("Tag kondisi belum tersimpan. Silakan coba lagi.");
     }
   };
 
@@ -248,10 +252,7 @@ export default function DetailLaporanPage() {
       }
       setSignoffMsg(res.error?.detail || "Anda sudah pernah memberikan penilaian pada siklus ini.");
     } catch {
-      setSignoffVote(choice);
-      if (choice === "CEPAT_RUSAK") {
-        setReopenedTriggered(true);
-      }
+      setSignoffMsg("Penilaian belum tersimpan. Silakan coba lagi.");
     }
   };
 
@@ -271,7 +272,7 @@ export default function DetailLaporanPage() {
           </div>
           <h1>{report.title}</h1>
           <p className="detail-address"><MapPin size={18} aria-hidden="true" />{report.suggestedStreetName || report.landmark}</p>
-          <span className="detail-draft">{cleanLabel(report.permanentLabel)}</span>
+
         </header>
 
         <div className="detail-grid">
@@ -289,7 +290,7 @@ export default function DetailLaporanPage() {
               <div className="detail-photos">
                 {[{label: "Sebelum perbaikan", photos: beforePhotos, empty: "Foto dari warga belum tersedia."}, {label: "Sesudah perbaikan", photos: afterPhotos, empty: "Foto dari instansi belum tersedia."}].map((group) => <figure key={group.label}>
                   <figcaption>{group.label}</figcaption>
-                  {group.photos.length ? group.photos.map((photo) => <a key={photo.id} href={photo.publicUrl} target="_blank" rel="noopener noreferrer" aria-label={`Buka foto ${group.label.toLowerCase()}`}><img src={photo.publicUrl} alt={`Bukti kondisi jalan ${group.label.toLowerCase()}`} /></a>) : <p className="detail-photo-empty">{group.empty}</p>}
+                  {group.photos.length ? group.photos.map((photo, index) => <PhotoPreview key={photo.id} photos={group.photos.map(item => ({ ...item, alt: `Bukti kondisi jalan ${group.label.toLowerCase()}` }))} index={index} label={`Lihat foto ${group.label.toLowerCase()}`}><img src={photo.publicUrl} alt={`Bukti kondisi jalan ${group.label.toLowerCase()}`} /></PhotoPreview>) : <p className="detail-photo-empty">{group.empty}</p>}
                 </figure>)}
               </div>
             </section>

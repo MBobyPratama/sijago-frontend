@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
-import { DemoNavbar } from "@/components/layout/DemoNavbar";
-import { SiteFooter } from "@/components/layout/SiteFooter";
+import { AppShell } from "@/components/layout/AppShell";
+import { AuthProvider } from "@/components/layout/AuthProvider";
+import { CitizenThemeProvider } from "@/components/layout/CitizenTheme";
+import { citizenThemeScript } from "@/components/layout/citizen-theme-config";
+import "@/components/layout/citizen-theme.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -25,11 +28,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id" className={plusJakartaSans.variable}>
+    <html lang="id" className={plusJakartaSans.variable} suppressHydrationWarning>
+      <head><script dangerouslySetInnerHTML={{ __html: citizenThemeScript }} /></head>
       <body className="min-h-screen flex flex-col bg-slate-50 font-sans text-slate-900">
-        <DemoNavbar />
-        <div className="flex-1">{children}</div>
-        <SiteFooter />
+        <CitizenThemeProvider>
+        <AuthProvider><AppShell>{children}</AppShell></AuthProvider>
+        </CitizenThemeProvider>
       </body>
     </html>
   );

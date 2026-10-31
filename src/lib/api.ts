@@ -1,16 +1,19 @@
-import { publicEnv } from "./env";
+export const browserApiBaseUrl = "/api/backend";
 
 export async function apiFetch<T>(
   path: string,
   options?: RequestInit
 ): Promise<{ success: boolean; data?: T; error?: { title: string; detail: string; code: string } }> {
-  const res = await fetch(`${publicEnv.apiBaseUrl}${path}`, {
+  const res = await fetch(`${browserApiBaseUrl}${path}`, {
     ...options,
+    credentials: "same-origin",
+    cache: "no-store",
     headers: {
       "Content-Type": "application/json",
       ...(options?.headers || {}),
     },
   });
+  if (res.status === 401 && !path.startsWith("/auth/") && typeof window !== "undefined") window.dispatchEvent(new Event("sijago:session-expired"));
   return res.json();
 }
 
