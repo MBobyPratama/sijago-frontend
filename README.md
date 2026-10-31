@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="public/images/logo_header.svg" alt="Logo SIJAGO — Sistem Jalan Bogor" width="320" />
+</p>
+
 # SIJAGO - Sistem Jalan Bogor
 
 SIJAGO adalah website pelaporan kerusakan jalan di Kota Bogor yang membantu warga mengirim laporan, melihat lokasi kerusakan, dan memantau tindak lanjut perbaikan. Admin memverifikasi dan meneruskan laporan, sedangkan instansi memperbarui perkembangan penanganan melalui dashboard.
@@ -7,10 +11,16 @@ SIJAGO adalah website pelaporan kerusakan jalan di Kota Bogor yang membantu warg
 - **FE (Vercel):** [sijago-frontend.vercel.app](https://sijago-frontend.vercel.app/)
 - **BE (Render):** [sijago-backend.onrender.com](https://sijago-backend.onrender.com)
 
-## Contributors
+## Akun Demo
 
-- **Sabira Putri Cahyani**
-- **Muhammad Boby Pratama**
+Untuk mencoba dashboard, buka [halaman login SIJAGO](https://sijago-frontend.vercel.app/login) dan gunakan akun dummy berikut:
+
+| Peran | Nama | Email | Kata sandi |
+| --- | --- | --- | --- |
+| Admin | Administrator SIJAGO | `admin@sijago.com` | `ADMINSIJAGO123` |
+| Instansi | Petugas PUPR Kota Bogor | `dpupr@kotabogor.go.id` | `PUPRKOTABOGOR123` |
+
+Akun admin digunakan untuk mencoba moderasi laporan, audit, dan pengaturan. Akun instansi digunakan untuk mencoba pengelolaan laporan yang ditugaskan ke Dinas PUPR Kota Bogor. Kedua akun merupakan akun demonstrasi; alamat instansi pada akun demo tidak menyatakan adanya kerja sama resmi.
 
 ## Tech Stack
 
@@ -114,3 +124,8 @@ Setelah akun dibuat, buka `/login` atau gunakan tautan **Masuk admin & instansi*
 - **Antarmuka:** layout responsif, tema Klasik/Biru/Gelap, maskot SIJAGO, dan preview foto di dalam website.
 
 Project masih dalam pengembangan untuk **MIA2026**. Skor prioritas saat ini menggunakan kelas ukuran kerusakan dan dukungan warga; perhitungan berbobot berdasarkan kategori, dampak, umur laporan, dan curah hujan belum diterapkan sepenuhnya. Kerja sama serta tindak lanjut instansi dalam konteks kompetisi masih merupakan simulasi, dan fitur layanan eksternal memerlukan konfigurasi yang valid.
+
+## Contributors
+
+- **Sabira Putri Cahyani**
+- **Muhammad Boby Pratama**
