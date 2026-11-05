@@ -1,5 +1,6 @@
 "use client";
 
+import { SavedTickets } from "@/components/SavedTickets";
 import { PhotoPreview } from "@/components/PhotoPreview";
 
 import React, { useState, useEffect } from "react";
@@ -97,6 +98,8 @@ export default function LacakTiketPage() {
             <p id="tracking-help">Kode tiket diberikan setelah laporan berhasil dikirim.</p>
           </form>
         </section>
+
+        <SavedTickets onSelect={setTicketInput} />
 
         {loadState === "loading" && <div className="tracking-state" role="status"><RefreshCw size={24} aria-hidden="true" /><h2>Mencari laporan…</h2><p>Sedang mengambil perkembangan tiket Anda.</p></div>}
         {loadState === "empty" && <div className="tracking-state" role="status"><FileSearch size={28} aria-hidden="true" /><h2>Masukkan kode tiket Anda</h2><p>Lihat kode pada bukti pengiriman atau tautan pelacakan laporan.</p></div>}

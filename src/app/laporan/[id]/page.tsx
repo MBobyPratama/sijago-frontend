@@ -279,7 +279,7 @@ function LoadedReportDetail({ initialReport, reportId }: { initialReport: Detail
           <div className="detail-main">
             <section className="detail-section" aria-labelledby="description-heading">
               <h2 id="description-heading">Kondisi yang dilaporkan</h2>
-              <p>{report.body}</p>
+              <p className="detail-description">{report.body}</p>
               <div className="detail-support">
                 <button type="button" onClick={handleToggleUpvote} aria-pressed={upvoted} className={`detail-button ${upvoted ? "is-selected" : ""}`}><ThumbsUp size={18} aria-hidden="true" />{upvoted ? "Sudah didukung" : "+1 Saya Lewat Sini"}<span>{report.upvotes}</span></button>
               </div>

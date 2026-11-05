@@ -7,6 +7,8 @@ import "./lapor.css";
 import imageCompression from "browser-image-compression";
 import exifr from "exifr";
 import { BogorMap } from "@/components/map/BogorMap";
+import { TicketReceipt, type ReceiptEmailStatus } from "@/components/TicketReceipt";
+import { saveTicket } from "@/lib/saved-tickets";
 import type { ReportItem } from "@/lib/reportTypes";
 import { apiFetch } from "@/lib/api";
 import {
@@ -67,6 +69,7 @@ export default function LaporPage() {
 
   // State ID Laporan di Neon PostgreSQL
   const [reportId, setReportId] = useState<string | null>(null);
+  const [receiptEmailStatus, setReceiptEmailStatus] = useState<ReceiptEmailStatus>("NOT_REQUESTED");
   const [ticketCode, setTicketCode] = useState<string>("");
 
   // State Fakta Asal (Source of Truth)
@@ -245,6 +248,7 @@ export default function LaporPage() {
   // Simpan Fakta Asal ke Neon PostgreSQL (POST /v1/reports atau PUT /v1/reports/:id/facts)
   const handleSaveFactsAndGoStep2 = async () => {
     if (isSavingFacts) return;
+    if (contactEmail.trim() && (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail.trim()) || contactEmail.trim().length > 255)) { setApiErrorBanner("Periksa format email, atau kosongkan jika tidak ingin menerima tiket melalui email."); return; }
     if (!landmark.trim() || photoIds.length === 0) { setApiErrorBanner("Tambahkan foto kerusakan dan isi patokan lokasi terlebih dahulu."); return; }
     if (observedAt && (!Number.isFinite(Date.parse(`${observedAt}+07:00`)) || Date.parse(`${observedAt}+07:00`) > Date.now())) { setApiErrorBanner("Waktu pengamatan tidak valid atau berada di masa depan."); return; }
     setIsSavingFacts(true);
@@ -344,6 +348,7 @@ export default function LaporPage() {
           reportId: string;
           ticketCode: string;
           status: string;
+          receiptEmailStatus?: ReceiptEmailStatus;
         }>(`/reports/${reportId}/submit`, {
           method: "POST",
           headers: {
@@ -355,7 +360,7 @@ export default function LaporPage() {
           }),
         });
 
-        if (!submitRes.success) {
+        if (!submitRes.success || !submitRes.data?.ticketCode) {
           setApiErrorBanner(submitRes.error?.detail || "Laporan belum berhasil dikirim. Silakan coba lagi.");
           if (/HASH|STALE|APPROVAL/.test(submitRes.error?.code || "")) {
             setIsStaleFromEdit(true);
@@ -366,7 +371,9 @@ export default function LaporPage() {
         }
 
         if (submitRes.data?.ticketCode) {
+          saveTicket(submitRes.data.ticketCode);
           setTicketCode(submitRes.data.ticketCode);
+          setReceiptEmailStatus(submitRes.data.receiptEmailStatus || (contactEmail.trim() ? "PENDING" : "NOT_REQUESTED"));
         }
       }
       setStep(3);
@@ -481,7 +488,7 @@ export default function LaporPage() {
                   <div className="report-field report-span-full"><label htmlFor="damage-landmark">Patokan lokasi <span>Wajib</span></label><input id="damage-landmark" name="landmark" type="text" value={landmark} onChange={(e) => markFactsModified(() => setLandmark(e.target.value))} /><p className="report-helper">Misalnya di depan gerbang, dekat persimpangan, atau arah lajur.</p></div>
                   <div className="report-field report-span-full"><label htmlFor="observed-at">Waktu pengamatan <span>Opsional</span></label><input id="observed-at" type="datetime-local" value={observedAt} onChange={(e) => markFactsModified(() => setObservedAt(e.target.value))} /><p className="report-helper">Waktu Anda melihat kerusakan, dalam WIB. Kosongkan jika tidak ingat.</p></div>
                   <div className="report-field report-span-full"><label htmlFor="damage-description">Kondisi di lapangan</label><textarea id="damage-description" name="freeText" rows={4} maxLength={1000} value={freeText} onChange={(e) => markFactsModified(() => setFreeText(e.target.value))} /><p className="report-helper">Maksimal 1.000 karakter.</p></div>
-                  <div className="report-field report-span-full"><label htmlFor="reporter-email">Email untuk notifikasi <span>Opsional</span></label><input id="reporter-email" name="contactEmail" type="email" autoComplete="email" value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="nama@email.com" /><p className="report-helper"><Lock size={14} aria-hidden="true" />Identitas & email Anda tidak akan diteruskan ke instansi dan tidak ditampilkan ke publik.</p></div>
+                  <div className="report-field report-span-full"><label htmlFor="reporter-email">Email untuk notifikasi <span>Opsional</span></label><input id="reporter-email" name="contactEmail" type="email" autoComplete="email" value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="nama@email.com" /><p className="report-helper"><Lock size={14} aria-hidden="true" />Tiket dan tautan pelacakan dikirim ke email ini. Identitas & email Anda tidak akan diteruskan ke instansi dan tidak ditampilkan ke publik.</p></div>
                 </div>
               </section>
               <div className="report-action-bar"><span className="report-helper">{reportId ? `Data laporan tersimpan (${ticketCode})` : ""}</span><button type="button" disabled={geoLoading || geoError || !geoInfo.isInsideBogorCity || isSavingFacts} onClick={handleSaveFactsAndGoStep2} className="report-primary">{isSavingFacts ? "Menyiapkan laporan…" : "Tinjau & kirim"}<ChevronRight size={17} aria-hidden="true" /></button></div>
@@ -505,7 +512,7 @@ export default function LaporPage() {
               <div className="report-action-bar"><button type="button" onClick={() => setStep(1)} className="report-text-button"><ArrowLeft size={16} aria-hidden="true" />Ubah Fakta Asal</button><button type="button" disabled={!approved || isStaleFromEdit || isSubmitting} onClick={handleApproveAndSubmitFinal} className="report-primary">{!approved || isStaleFromEdit ? <Lock size={16} aria-hidden="true" /> : <CheckCircle2 size={16} aria-hidden="true" />}{isSubmitting ? "Mengirim laporan…" : "Kirim laporan"}</button></div>
             </div>}
 
-            {step === 3 && <section className="report-panel report-success" aria-labelledby="success-heading"><Image src="/images/sijago_pose_menyapa.svg" alt="" width={462} height={445} className="report-success-mascot" /><h2 id="success-heading">Laporan Anda sudah terkirim</h2><p>Laporan masuk ke antrean verifikasi Admin. Simpan kode tiket untuk memantau perkembangannya.</p><div className="report-ticket"><span>Kode tiket Anda</span><strong>{ticketCode}</strong><span>Status: Menunggu verifikasi</span></div><div className="report-success-actions"><Link href={`/lacak?kode=${ticketCode}`} className="report-primary">Lacak tiket</Link><Link href="/admin/audit" className="report-secondary">Lihat jejak audit</Link></div></section>}
+            {step === 3 && <section className="report-panel report-success" aria-labelledby="success-heading"><Image src="/images/sijago_pose_menyapa.svg" alt="" width={462} height={445} className="report-success-mascot" /><h2 id="success-heading">Laporan Anda sudah terkirim</h2><p>Laporan masuk ke antrean verifikasi Admin. Simpan kode tiket untuk memantau perkembangannya.</p><TicketReceipt ticketCode={ticketCode} emailStatus={receiptEmailStatus} /></section>}
           </div>
         </div>
         <p className="report-bottom-note"><CircleHelp size={16} aria-hidden="true" />SIJAGO membantu pelaporan. Waktu perbaikan fisik menjadi kewenangan instansi terkait.</p>

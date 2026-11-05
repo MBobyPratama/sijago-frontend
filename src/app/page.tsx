@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useCallback, useRef, useMemo } from "react";
 import Link from "next/link";
 import { PublicFaq } from "@/components/layout/PublicFaq";
+import { AgencyCarousel } from "@/components/AgencyCarousel";
 import { BogorMap } from "@/components/map/BogorMap";
 import { ReportItem } from "@/lib/reportTypes";
 import { apiFetch, getClientFingerprint } from "@/lib/api";
@@ -118,6 +119,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      <AgencyCarousel />
       <div className="pm-container pm-map-content" id="peta-publik">
         <section aria-label="Peta dan laporan jalan" className="pm-workspace">
           <div className="pm-toolbar">
