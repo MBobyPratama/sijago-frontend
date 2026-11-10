@@ -180,3 +180,5 @@ html, body { overflow-x: clip; }
 .mod-reject-summary dd span { display: block; margin-top: var(--space-2xs); font-weight: 400; color: var(--color-ink-2); }
 .mod-reject-dialog .mod-error { color: var(--color-reopened-ink); }
 @media (max-width: 480px) { .mod-reject-dialog .mod-modal-actions { flex-direction: column-reverse; } .mod-reject-dialog .mod-modal-actions .mod-button { width: 100%; } }
+
+.mod-merge-icon { background: var(--color-selected); color: var(--color-accent); }
