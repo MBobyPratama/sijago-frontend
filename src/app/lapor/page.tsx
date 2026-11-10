@@ -1,5 +1,7 @@
 "use client";
 
+import { PhotoAnalysis } from "./PhotoAnalysis";
+
 import { ReportDescription } from "@/components/ReportDescription";
 
 import React, { useState, useEffect, useRef } from "react";
@@ -102,6 +104,7 @@ export default function LaporPage() {
   const [contactEmail, setContactEmail] = useState("");
 
   // State Upload Foto Cloudinary + EXIF
+  const [analysisImage, setAnalysisImage] = useState<string | null>(null);
   const [photoIds, setPhotoIds] = useState<string[]>([]);
   const [photoStatusText, setPhotoStatusText] = useState(
     "Belum ada foto yang diunggah."
@@ -166,6 +169,7 @@ export default function LaporPage() {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    setAnalysisImage(null);
     setIsUploadingPhoto(true);
     setPhotoStatusText("Mengompresi foto & membaca metadata EXIF...");
 
@@ -175,6 +179,14 @@ export default function LaporPage() {
         maxSizeMB: 1.2,
         maxWidthOrHeight: 1600,
         useWebWorker: true,
+        preserveExif: false,
+      });
+
+      const imageForAnalysis = await new Promise<string>((resolve,reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result));
+        reader.onerror = () => reject(new Error("Foto belum dapat dibaca."));
+        reader.readAsDataURL(compressed);
       });
 
       const signRes = await apiFetch<{
@@ -230,8 +242,9 @@ export default function LaporPage() {
 
       if (regRes.success && regRes.data?.photo?.id) {
         markFactsModified(() => setPhotoIds([regRes.data!.photo.id]));
-      } else { throw new Error("Foto belum tersimpan."); }
+      } else { throw new Error(regRes.error?.detail || "Foto belum tersimpan."); }
 
+      setAnalysisImage(imageForAnalysis);
       setPhotoPreviewUrl(originalSecureUrl);
       setPhotoStatusText(
         `✓ ${file.name} (${Math.round(compressed.size / 1024)} KB • EXIF ${
@@ -444,7 +457,7 @@ export default function LaporPage() {
 
             {step === 1 && <div className="report-panel">
               <section className="report-section" aria-labelledby="photo-heading">
-                <div className="report-section-heading"><div><h2 id="photo-heading">Foto kerusakan</h2><p>Tambahkan 1 hingga 3 foto yang memperlihatkan kondisi jalan.</p></div><span className="report-required">Wajib</span></div>
+                <div className="report-section-heading"><div><h2 id="photo-heading">Foto kerusakan</h2><p>Tambahkan foto kondisi jalan. Foto diperiksa otomatis oleh OpenAI untuk keamanan dan relevansi sebelum dapat digunakan.</p></div><span className="report-required">Wajib</span></div>
                 <div className="report-photo-grid">
                   {[1, 2, 3].map((number) => <label key={number} className={`report-photo-slot ${number === 1 ? "report-photo-main" : ""}`}>
                     {number === 1 && photoPreviewUrl ? <img src={photoPreviewUrl} alt="Pratinjau foto kerusakan yang dipilih" className="report-photo-preview" width={320} height={180} /> : <Camera size={number === 1 ? 26 : 22} aria-hidden="true" />}
@@ -454,6 +467,11 @@ export default function LaporPage() {
                 </div>
                 <p className="report-helper" role="status"><Upload size={15} aria-hidden="true" />{photoStatusText}</p>
                 <p className="report-helper">Foto dikompresi sebelum diunggah. Gunakan foto Anda sendiri saat membuat laporan.</p>
+                <PhotoAnalysis key={isUploadingPhoto ? "uploading" : photoIds.join(",")} image={analysisImage} photoId={photoIds[0]} onApply={suggestion => markFactsModified(() => {
+                  if (suggestion.category) setCategory(suggestion.category);
+                  if (suggestion.sizeClass) setSizeClass(suggestion.sizeClass);
+                  if (suggestion.condition) setFreeText(suggestion.condition);
+                })} />
               </section>
 
               <section className="report-section" aria-labelledby="location-heading">
