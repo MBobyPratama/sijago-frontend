@@ -1,0 +1,7 @@
+.report-description { min-width: 0; color: var(--color-ink-2); line-height: 1.75; overflow-wrap: anywhere; }
+.report-description ul { list-style: disc; margin: 0; padding-left: var(--space-lg); display: grid; gap: var(--space-xs); }
+.report-description li { min-width: 0; white-space: pre-wrap; }
+.report-description strong { font-weight: 600; color: var(--color-ink); }
+.report-description .report-description-condition { margin-top: var(--space-md); }
+.report-description .report-description-condition h4 { margin: 0 0 var(--space-xs); font: inherit; font-weight: 600; color: var(--color-ink); }
+.report-description p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }

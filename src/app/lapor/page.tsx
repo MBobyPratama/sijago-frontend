@@ -1,5 +1,7 @@
 "use client";
 
+import { ReportDescription } from "@/components/ReportDescription";
+
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -52,6 +54,7 @@ interface GeoValidateResponse {
 }
 
 interface ReportDraftApiData {
+  description?: import("@/components/ReportDescription").ReportDescriptionData;
   draftId: string;
   reportId: string;
   factsHash: string;
@@ -122,7 +125,13 @@ export default function LaporPage() {
 
   const [approved, setApproved] = useState(false);
   const [isStaleFromEdit, setIsStaleFromEdit] = useState(false);
-  const [apiErrorBanner, setApiErrorBanner] = useState<string | null>(null);
+  const [apiErrorBanner, updateApiErrorBanner] = useState<string | null>(null);
+  const [errorAnnouncement, setErrorAnnouncement] = useState(0);
+  const errorBannerRef = useRef<HTMLDivElement>(null);
+  const setApiErrorBanner = (message: string | null) => {
+    updateApiErrorBanner(message);
+    if (message) setErrorAnnouncement(value => value + 1);
+  };
 
   const [geoLoading, setGeoLoading] = useState(false);
   const [geoError, setGeoError] = useState(false);
@@ -390,6 +399,17 @@ export default function LaporPage() {
     document.getElementById("report-heading")?.scrollIntoView({ block: "start", behavior: "instant" });
   }, [step]);
 
+  useEffect(() => {
+    if (!apiErrorBanner) return;
+    const frame = requestAnimationFrame(() => {
+      const banner = errorBannerRef.current;
+      if (!banner) return;
+      banner.focus({ preventScroll: true });
+      banner.scrollIntoView({ block: "start", behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [apiErrorBanner, errorAnnouncement]);
+
   const progress = [
     { title: "Isi data laporan", description: "Foto, lokasi, dan kondisi jalan", icon: Camera },
     { title: "Tinjau & kirim", description: "Pastikan laporan sesuai fakta", icon: CheckCircle2 },
@@ -420,7 +440,7 @@ export default function LaporPage() {
           </aside>
 
           <div className="report-content">
-            {apiErrorBanner && <div className="report-alert report-alert-error" role="alert"><AlertTriangle size={19} aria-hidden="true" /><div><strong>Laporan belum dapat dikirim</strong><p>{apiErrorBanner}</p></div><button type="button" onClick={() => setApiErrorBanner(null)} className="report-text-button">Tutup</button></div>}
+            {apiErrorBanner && <div ref={errorBannerRef} tabIndex={-1} className="report-alert report-alert-error report-error-banner" role="alert"><AlertTriangle size={19} aria-hidden="true" /><div><strong>Laporan belum dapat dikirim</strong><p>{apiErrorBanner}</p></div><button type="button" onClick={() => setApiErrorBanner(null)} className="report-text-button">Tutup</button></div>}
 
             {step === 1 && <div className="report-panel">
               <section className="report-section" aria-labelledby="photo-heading">
@@ -506,7 +526,7 @@ export default function LaporPage() {
                   <div><dt>Waktu pengamatan</dt><dd>{observedAt ? `${observedAt.replace("T", " ")} WIB` : "Tidak diisi"}</dd></div>
                   <div><dt>Kondisi di lapangan</dt><dd>{freeText}</dd></div>
                 </dl></section>
-                <section className="report-review-draft"><div className="report-review-title"><h3>Draf laporan</h3></div><p className="report-helper">Baca saja. Ubah data asal untuk memperbarui draf.</p><h4>{draft.title}</h4><p className="report-draft-body">{draft.body}</p><button type="button" onClick={() => setStep(1)} className="report-text-button">Ingin ubah isi? Edit Fakta Asal</button></section>
+                <section className="report-review-draft"><div className="report-review-title"><h3>Draf laporan</h3></div><p className="report-helper">Baca saja. Ubah data asal untuk memperbarui draf.</p><h4>{draft.title}</h4><ReportDescription description={draft.description} fallbackBody={draft.body} /><button type="button" onClick={() => setStep(1)} className="report-text-button">Ingin ubah isi? Edit Fakta Asal</button></section>
               </div>
               <div className="report-approval"><label className="report-checkbox"><input type="checkbox" disabled={isStaleFromEdit} checked={approved} onChange={(e) => setApproved(e.target.checked)} /><span>Saya sudah meninjau dan menyetujui draf ini. Saya menyatakan bahwa data Fakta Asal yang dilaporkan sesuai dengan kondisi nyata di lapangan.</span></label></div>
               <div className="report-action-bar"><button type="button" onClick={() => setStep(1)} className="report-text-button"><ArrowLeft size={16} aria-hidden="true" />Ubah Fakta Asal</button><button type="button" disabled={!approved || isStaleFromEdit || isSubmitting} onClick={handleApproveAndSubmitFinal} className="report-primary">{!approved || isStaleFromEdit ? <Lock size={16} aria-hidden="true" /> : <CheckCircle2 size={16} aria-hidden="true" />}{isSubmitting ? "Mengirim laporan…" : "Kirim laporan"}</button></div>

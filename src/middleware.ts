@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { publicEnv } from "./lib/env";
-import { homeForUser, type AuthUser } from "./lib/auth-types";
+import { canAccessPortalPath, homeForUser, type AuthUser } from "./lib/auth-types";
 export async function middleware(request: NextRequest) {
   const token = request.cookies.get("sijago_session")?.value;
   let user: AuthUser | null = null;
@@ -17,9 +17,9 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
   const path = request.nextUrl.pathname;
-  if ((user.role === "PETUGAS_INSTANSI" && path.startsWith("/admin")) || (user.role === "AUDITOR" && path !== "/admin/audit")) return NextResponse.redirect(new URL(homeForUser(user), request.url));
+  if (!canAccessPortalPath(user, path)) return NextResponse.redirect(new URL(homeForUser(user), request.url));
   const headers = new Headers(request.headers);
   headers.set("x-sijago-path", request.nextUrl.pathname + request.nextUrl.search);
   return NextResponse.next({ request: { headers } });
 }
-export const config = { matcher: ["/admin/:path*", "/instansi/:path*"] };
+export const config = { matcher: ["/admin/:path*", "/instansi/:path*", "/theme-guide/:path*"] };

@@ -92,6 +92,7 @@ html, body { overflow-x: clip; }
 .audit-empty p, .audit-loading p { color: var(--color-muted); font-size: var(--text-sm); margin-block: var(--space-sm) var(--space-md); }
 .audit-loading > span { display: block; height: 64px; background: var(--color-paper-2); margin-bottom: var(--space-md); border-radius: var(--radius-control); }
 .audit-tools { margin-top: var(--space-xl); border-top: 1px solid var(--color-rule); padding-top: var(--space-xl); }
+.audit-export-actions { display: flex; flex-wrap: wrap; gap: var(--space-sm); }
 .audit-tools-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: var(--space-xl); margin-top: var(--space-lg); }
 .audit-tools p { color: var(--color-muted); font-size: var(--text-sm); margin-block: var(--space-sm) var(--space-md); }
 .audit-simulation { margin-top: var(--space-lg); }

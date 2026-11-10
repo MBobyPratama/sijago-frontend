@@ -13,8 +13,9 @@ export async function apiFetch<T>(
       ...(options?.headers || {}),
     },
   });
-  if (res.status === 401 && !path.startsWith("/auth/") && typeof window !== "undefined") window.dispatchEvent(new Event("sijago:session-expired"));
-  return res.json();
+  const result = await res.json();
+  if (res.status === 401 && result?.error?.code === "AUTH_REQUIRED" && !path.startsWith("/auth/") && typeof window !== "undefined") window.dispatchEvent(new Event("sijago:session-expired"));
+  return result;
 }
 
 export function getClientFingerprint(): string {

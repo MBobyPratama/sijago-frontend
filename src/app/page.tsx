@@ -1,5 +1,7 @@
 "use client";
 
+import { ReportDescription } from "@/components/ReportDescription";
+
 import React, { useEffect, useState, useCallback, useRef, useMemo } from "react";
 import Link from "next/link";
 import { PublicFaq } from "@/components/layout/PublicFaq";
@@ -183,7 +185,7 @@ export default function HomePage() {
                       {rep.status === "SELESAI" && <p className="pm-monitoring">Dalam pemantauan 30 hari</p>}
                       <details className="pm-report-summary">
                         <summary>Ringkasan laporan</summary>
-                        <div><p>{rep.body}</p>
+                        <div><ReportDescription description={rep.description} fallbackBody={rep.body} />
                           {rep.isRecurrentHotspot && <p className="pm-recurrence">Kerusakan berulang di titik ini.</p>}
                           {rep.conditionTags.map((tag) => <p key={tag.code}>{tag.label} ({tag.count})</p>)}
                         </div>

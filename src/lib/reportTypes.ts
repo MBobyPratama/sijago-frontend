@@ -1,4 +1,6 @@
 export interface ReportItem {
+  publicAdminResponse?: string | null;
+  description?: import("@/components/ReportDescription").ReportDescriptionData | null;
   id: string;
   ticketCode: string;
   trackingToken: string;
