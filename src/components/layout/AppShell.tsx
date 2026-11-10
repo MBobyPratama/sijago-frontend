@@ -15,6 +15,7 @@ const ADMIN_LINKS = [
   { href: "/admin/moderasi", label: "Moderasi laporan", icon: ShieldCheck },
   { href: "/admin/audit", label: "Riwayat audit", icon: ScrollText },
   { href: "/admin/pengaturan", label: "Pengaturan", icon: SlidersHorizontal },
+  { href: "/theme-guide", label: "Panduan desain", icon: Palette },
 ];
 const AGENCY_LINKS = [
   { href: "/instansi/laporan", label: "Laporan instansi", icon: Building2 },
@@ -61,10 +62,6 @@ function DashboardShell({ children, agency }: { children: React.ReactNode; agenc
       </nav>
       <div className="dashboard-sidebar-divider" />
       <Link href="/" className="dashboard-back-public"><ArrowLeft size={18} aria-hidden="true" /><span>Kembali ke halaman warga</span></Link>
-      <div className="dashboard-sidebar-bottom dashboard-navigation dashboard-secondary">
-        {user && ["ADMIN", "SUPER_ADMIN"].includes(user.role) && <Link href={agency ? "/admin/moderasi" : "/instansi/laporan"}>{agency ? <ShieldCheck size={18} aria-hidden="true" /> : <Building2 size={18} aria-hidden="true" />}<span>{agency ? "Buka admin" : "Buka portal instansi"}</span></Link>}
-        <Link href="/theme-guide"><Palette size={18} aria-hidden="true" /><span>Panduan desain</span></Link>
-      </div>
     </div>
   </>;
 
@@ -90,6 +87,6 @@ function DashboardShell({ children, agency }: { children: React.ReactNode; agenc
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   if (pathname === "/login") return <>{children}</>;
-  if (pathname.startsWith("/admin/") || pathname.startsWith("/instansi/")) return <DashboardShell agency={pathname.startsWith("/instansi/")}>{children}</DashboardShell>;
+  if (pathname.startsWith("/admin/") || pathname.startsWith("/instansi/") || pathname === "/theme-guide" || pathname.startsWith("/theme-guide/")) return <DashboardShell agency={pathname.startsWith("/instansi/")}>{children}</DashboardShell>;
   return <><DemoNavbar /><div className="flex-1">{children}</div><SiteFooter /></>;
 }

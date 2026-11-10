@@ -186,3 +186,5 @@ html, body { overflow-x: clip; }
   .report-bottom-note { align-items: flex-start; justify-content: flex-start; }
 }
 @media (prefers-reduced-motion: reduce) { .report-page *, .report-page *::before, .report-page *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+/* Keep validation feedback clear of the viewport edge when it receives focus. */
+.report-error-banner { scroll-margin-block-start: var(--space-lg); }

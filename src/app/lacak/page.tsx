@@ -13,6 +13,7 @@ import "./lacak.css";
 
 type ReportStatus = ReportItem["status"] | "DUPLIKAT" | "DITUTUP";
 interface LiveTrackResponse {
+  publicAdminResponse?: string | null;
   id: string;
   ticketCode: string;
   status: ReportStatus;
@@ -118,6 +119,7 @@ export default function LacakTiketPage() {
           <div className="tracking-details-layout">
             <section className="tracking-timeline" aria-labelledby="timeline-heading"><h3 id="timeline-heading">Perjalanan laporan</h3><ol>{timeline.map((item, idx) => <li key={idx} className={item.done ? "is-done" : "is-pending"}><span className="tracking-timeline-icon">{item.done ? <CheckCircle2 size={20} aria-hidden="true" /> : <Clock size={20} aria-hidden="true" />}</span><div className="tracking-timeline-copy"><div className="tracking-timeline-heading"><h4>{item.stage}</h4><span>{item.time || (item.done ? "Waktu belum tersedia" : terminal ? "Tidak dilanjutkan" : "Menunggu pembaruan")}</span></div><p className="tracking-actor">{item.actor}</p><p>{item.desc}</p></div></li>)}</ol></section>
             <aside className="tracking-aside" aria-label="Informasi tindak lanjut">
+            {liveReport?.publicAdminResponse && <section className="tracking-agency" aria-labelledby="tracking-admin-response"><h3 id="tracking-admin-response">Tanggapan admin</h3><p style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>{liveReport.publicAdminResponse}</p></section>}
               <section className="tracking-agency"><Building2 size={22} aria-hidden="true" /><h3>Instansi penanganan</h3><p>{displayAgency || "Belum ditentukan. Laporan masih ditinjau Admin SIJAGO."}</p><p className="tracking-helper">Jadwal perbaikan menjadi kewenangan instansi terkait.</p></section>
 
               <section className="tracking-email"><Mail size={20} aria-hidden="true" /><h3>Notifikasi email</h3><p>Hanya dikirim jika pelapor memberikan persetujuan eksplisit. Email tidak menjanjikan waktu perbaikan.</p><p className="tracking-helper">Untuk berhenti berlangganan, gunakan tautan di email notifikasi.</p></section>

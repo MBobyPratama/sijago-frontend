@@ -2,11 +2,11 @@ import "server-only";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { publicEnv } from "./env";
-import { homeForUser, type AuthUser } from "./auth-types";
+import { canAccessPortalPath, homeForUser, type AuthUser } from "./auth-types";
 
-export async function requirePortalUser(portal: "admin" | "agency") {
+export async function requirePortalUser(portal: "admin" | "agency", requiredPath?: string) {
   const token = (await cookies()).get("sijago_session")?.value;
-  const path = (await headers()).get("x-sijago-path") || (portal === "admin" ? "/admin/moderasi" : "/instansi/laporan");
+  const path = requiredPath || (await headers()).get("x-sijago-path") || (portal === "admin" ? "/admin/moderasi" : "/instansi/laporan");
   let user: AuthUser | null = null;
   if (token && /^[a-f0-9]{64}$/.test(token)) {
     try {
@@ -16,7 +16,6 @@ export async function requirePortalUser(portal: "admin" | "agency") {
     } catch { /* No session is accepted when the backend cannot validate it. */ }
   }
   if (!user) redirect(`/login?next=${encodeURIComponent(path)}`);
-  if (portal === "admin" && user.role === "PETUGAS_INSTANSI") redirect(homeForUser(user));
-  if (user.role === "AUDITOR" && (portal !== "admin" || !path.startsWith("/admin/audit"))) redirect(homeForUser(user));
+  if (!canAccessPortalPath(user, path)) redirect(homeForUser(user));
   return user;
 }

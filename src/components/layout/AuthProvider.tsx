@@ -12,7 +12,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const version = useRef(0);
-  const protectedPage = pathname.startsWith("/admin/") || pathname.startsWith("/instansi/");
+  const protectedPage = pathname.startsWith("/admin/") || pathname.startsWith("/instansi/") || pathname === "/theme-guide" || pathname.startsWith("/theme-guide/");
   useEffect(() => {
     const current = ++version.current;
     setLoading(true);

@@ -65,8 +65,12 @@ html, body { overflow-x: clip; }
 .mod-success { background: var(--color-civic-paper); color: var(--color-civic-ink); }
 .mod-dismiss { padding-inline: var(--space-xs); min-height: 44px; border: 0; background: var(--color-paper-3); color: var(--color-ink); font-size: var(--text-sm) !important; text-decoration: underline; border-radius: var(--radius-control); cursor: pointer; white-space: nowrap; }
 .mod-dismiss:hover { background: var(--color-paper-2); }
-.mod-workspace { display: grid; grid-template-columns: minmax(0,.46fr) minmax(0,1fr); align-items: start; border: 1px solid var(--color-rule); border-radius: var(--radius-card); background: var(--color-paper-3); overflow: clip; }
-.mod-queue { min-width: 0; }
+.mod-workspace { display: grid; grid-template-columns: minmax(0,.46fr) minmax(0,1fr); align-items: start; gap: var(--space-lg); }
+.mod-queue { min-width: 0; border: 1px solid var(--color-rule); border-radius: var(--radius-card); background: var(--color-paper-3); overflow: clip; }
+.mod-pagination { border-top: 1px solid var(--color-rule); padding: var(--space-md); font-size: var(--text-xs); color: var(--color-muted); font-variant-numeric: tabular-nums; }
+.mod-pagination p { margin-bottom: var(--space-sm); }
+.mod-pagination > div { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--space-xs); }
+.mod-pagination .mod-button { padding-inline: var(--space-sm); font-size: var(--text-xs) !important; }
 .mod-queue-heading { padding: var(--space-lg); border-bottom: 1px solid var(--color-rule); }
 .mod-queue-heading h2 { display: flex; align-items: center; gap: var(--space-xs); }
 .mod-queue-heading h2 span { font-variant-numeric: tabular-nums; color: var(--color-muted); font-size: var(--text-sm); }
@@ -97,7 +101,7 @@ html, body { overflow-x: clip; }
 .mod-status-MENUNGGU_VERIFIKASI, .mod-status-DIPROSES { background: var(--color-progress-paper); color: var(--color-progress-ink); }
 .mod-report-meta { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-xs); color: var(--color-muted); font-size: var(--text-xs); font-variant-numeric: tabular-nums; }
 .mod-row-warning { display: flex; align-items: center; gap: var(--space-xs); color: var(--color-progress-ink); font-size: var(--text-xs); }
-.mod-inspection { min-width: 0; border-left: 1px solid var(--color-rule); padding: var(--space-lg); }
+.mod-inspection { min-width: 0; border: 1px solid var(--color-rule); border-radius: var(--radius-card); background: var(--color-paper-3); padding: var(--space-lg); }
 .mod-detail-heading { padding-bottom: var(--space-lg); border-bottom: 1px solid var(--color-rule); }
 .mod-detail-meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-md); font-size: var(--text-sm); font-variant-numeric: tabular-nums; font-weight: 600; }
 .mod-detail-heading h2 { font-size: var(--text-xl); line-height: 1.35; }
@@ -154,9 +158,25 @@ html, body { overflow-x: clip; }
 .mod-facts-disclosure > p { margin-top: var(--space-md); font-size: var(--text-sm); }
 .mod-decision-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-sm); margin-bottom: var(--space-md); }
 .mod-secondary-actions { margin-top: var(--space-md); padding-top: var(--space-md); }
+.mod-email-delivery { margin-top: var(--space-md); padding-top: var(--space-md); border-top: 1px solid var(--color-rule); }
+.mod-email-delivery .mod-button { margin-top: var(--space-sm); }
 .mod-back-queue { display: none; }
 @media (max-width: 760px) { .mod-back-queue { display: inline-flex; align-items: center; min-height: 44px; color: var(--color-accent); text-decoration: underline; font-size: var(--text-sm); } .mod-queue-list { max-height: 360px; } #inspection-heading { scroll-margin-top: var(--space-lg); } }
 
 .mod-cancel-dialog { margin: auto; border: 1px solid var(--color-rule); color: var(--color-ink); width: min(640px, calc(100% - 32px)); }
 .mod-cancel-dialog::backdrop { background: var(--mod-overlay); }
 .mod-cancel-dialog form { display: grid; gap: var(--space-md); }
+
+/* Hallmark · component: reject confirmation · existing SIJAGO tokens · keyboard, pending, error and success states retained */
+.mod-reject-dialog { width: min(480px, calc(100% - 32px)); margin: auto; border: 1px solid var(--color-rule); color: var(--color-ink); font-family: var(--font-body); }
+.mod-reject-dialog::backdrop { background: var(--mod-overlay); }
+.mod-reject-dialog form { display: grid; gap: var(--space-md); }
+.mod-reject-dialog h2 { font-size: var(--text-lg); line-height: 1.4; text-wrap: balance; min-width: 0; overflow-wrap: break-word; }
+.mod-reject-dialog p { font-size: var(--text-sm); line-height: 1.7; color: var(--color-muted); }
+.mod-reject-icon { display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: var(--radius-control); background: var(--color-reopened-paper); color: var(--color-reopened-ink); }
+.mod-reject-summary { border-block: 1px solid var(--color-rule); padding-block: var(--space-md); display: grid; gap: var(--space-md); }
+.mod-reject-summary dt { color: var(--color-muted); font-size: var(--text-xs); }
+.mod-reject-summary dd { margin: var(--space-2xs) 0 0; font-size: var(--text-sm); font-weight: 600; overflow-wrap: anywhere; }
+.mod-reject-summary dd span { display: block; margin-top: var(--space-2xs); font-weight: 400; color: var(--color-ink-2); }
+.mod-reject-dialog .mod-error { color: var(--color-reopened-ink); }
+@media (max-width: 480px) { .mod-reject-dialog .mod-modal-actions { flex-direction: column-reverse; } .mod-reject-dialog .mod-modal-actions .mod-button { width: 100%; } }

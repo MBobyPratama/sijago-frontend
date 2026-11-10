@@ -96,7 +96,7 @@ export function DemoNavbar() {
         </div>
 
         <div className="flex items-center gap-2 text-xs">
-          <Link
+          {(user?.role === "ADMIN" || user?.role === "SUPER_ADMIN") && <Link
             href="/theme-guide"
             className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-md font-bold border transition ${
               pathname === "/theme-guide"
@@ -106,7 +106,7 @@ export function DemoNavbar() {
           >
             <Palette className="w-3.5 h-3.5" />
             Theme Guide (Acuan Desain Figma)
-          </Link>
+          </Link>}
         </div>
       </div>
 

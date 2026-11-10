@@ -37,6 +37,10 @@ export default function AdminAuditPage() {
   const [actorFilter, setActorFilter] = useState("ALL");
   const [page, setPage] = useState(1);
   const [expandedId, setExpandedId] = useState<number | null>(null);
+  const [exporting, setExporting] = useState<"csv" | "json" | null>(null);
+  const [exportError, setExportError] = useState<string | null>(null);
+  const [exportMessage, setExportMessage] = useState("");
+  const exportBusy = useRef(false);
   const requestVersion = useRef(0);
   const hasLiveData = useRef(false);
   const fetchLogs = useCallback(async () => {
@@ -65,20 +69,36 @@ export default function AdminAuditPage() {
   const currentPage = Math.min(page,totalPages);
   const visibleLogs = filteredLogs.slice((currentPage-1)*10,currentPage*10);
   const resetFilters = () => { setQuery(""); setActionFilter("ALL"); setActorFilter("ALL"); setPage(1); };
+  const exportLogs = async (format: "csv" | "json") => {
+    if (exportBusy.current || loading || !filteredLogs.length) return;
+    exportBusy.current = true;
+    setExporting(format); setExportError(null); setExportMessage("");
+    try {
+      const response = await apiFetch<{ content: string; filename: string; mimeType: string; count: number }>("/audit/export", { method: "POST", body: JSON.stringify({ format, ids: filteredLogs.map(log => log.id) }) });
+      if (!response.success || !response.data) throw new Error(response.error?.detail || "Ekspor belum dapat disiapkan. Coba lagi.");
+      const { content, filename, mimeType, count } = response.data;
+      const url = URL.createObjectURL(new Blob([content], { type: mimeType }));
+      const link = document.createElement("a");
+      link.href = url; link.download = filename; document.body.appendChild(link);
+      try { link.click(); } finally { link.remove(); window.setTimeout(() => URL.revokeObjectURL(url), 1000); }
+      setExportMessage(`${count} entri berhasil diekspor sebagai ${format.toUpperCase()}. Aktivitas ekspor telah dicatat di riwayat audit.`);
+    } catch (err) {
+      setExportError(err instanceof Error ? err.message : "Ekspor gagal. Coba lagi.");
+    } finally { exportBusy.current = false; setExporting(null); }
+  };
 
   return (
     <main className="audit-page"><div className="audit-container">
       <header className="audit-heading"><div><h1>Riwayat audit</h1><p>Telusuri tindakan, pelaku, dan perubahan laporan tanpa mengubah catatannya.</p></div><button type="button" className="audit-button" onClick={fetchLogs} disabled={loading}><RefreshCw size={16} aria-hidden="true" />{loading?"Memuat riwayat…":"Segarkan riwayat"}</button></header>
       <div className="audit-context"><span role="status" className={source==="live"&&!error?"audit-source-live":"audit-source-warning"}>{error&&source==="live"?"Data terakhir, koneksi gagal":source==="live"?"Data dari server":"Belum ada data server"}</span><span><Link2 size={16} aria-hidden="true" />Hash tersimpan; integritas belum diperiksa.</span></div>
       {error && <div className="audit-notice audit-warning" role="alert"><ShieldAlert size={18} aria-hidden="true" /><p>{error} {source==="live"?"Data terakhir tetap ditampilkan. Coba segarkan kembali.":"Riwayat belum dapat dimuat."}</p></div>}
-      <details className="audit-explanation"><summary>Perlindungan dan cakupan audit</summary><p>Tabel <code>report_audit_logs</code> bersifat append-only. Trigger <code>trg_protect_report_audit_logs</code> menolak UPDATE dan DELETE. Hash sebelumnya dan hash entri tersedia untuk penelusuran, tetapi halaman ini belum menjalankan verifikasi hash chain.</p><p>Daftar ini hanya menampilkan entri yang dikembalikan API, bukan seluruh arsip. Pencarian dan filter berlaku pada data yang dimuat.</p></details>
       <section className="audit-workspace" aria-labelledby="audit-list-heading" aria-busy={loading}>
         <div className="audit-list-heading"><h2 id="audit-list-heading">Daftar peristiwa</h2><span>{filteredLogs.length} dari {logs.length} entri dimuat</span></div>
         <div className="audit-filters"><div className="audit-field audit-search"><label htmlFor="audit-search">Cari entri</label><div><Search size={16} aria-hidden="true" /><input id="audit-search" type="search" value={query} onChange={e=>{setQuery(e.target.value);setPage(1);}} placeholder="ID, laporan, aktor, atau tindakan" /></div></div><div className="audit-field"><label htmlFor="audit-action">Jenis tindakan</label><select id="audit-action" value={actionFilter} onChange={e=>{setActionFilter(e.target.value);setPage(1);}}><option value="ALL">Semua tindakan</option>{actionOptions.map(action=><option key={action} value={action}>{ACTION_LABELS[action] || action}</option>)}</select></div><div className="audit-field"><label htmlFor="audit-actor">Tipe aktor</label><select id="audit-actor" value={actorFilter} onChange={e=>{setActorFilter(e.target.value);setPage(1);}}><option value="ALL">Semua aktor</option>{actorOptions.map(actor=><option key={actor} value={actor}>{actor}</option>)}</select></div></div>
         {loading ? <div className="audit-loading" role="status"><span /><span /><span /><p>Memuat daftar peristiwa audit…</p></div> : !visibleLogs.length ? <div className="audit-empty"><h3>{logs.length?"Tidak ada entri yang cocok":"Belum ada riwayat audit"}</h3><p>{logs.length?"Coba kata kunci atau filter lain.":"Peristiwa akan muncul setelah aktivitas sistem tercatat."}</p>{logs.length>0 && <button type="button" className="audit-button" onClick={resetFilters}>Reset filter</button>}</div> : <table className="audit-table"><caption className="audit-sr-only">Riwayat audit, waktu UTC. Buka detail untuk snapshot dan hash lengkap.</caption><thead><tr><th scope="col">Waktu / ID</th><th scope="col">Tindakan</th><th scope="col">Laporan</th><th scope="col">Aktor</th><th scope="col">Perubahan</th></tr></thead><tbody>{visibleLogs.map(log=><React.Fragment key={log.id}><tr className={expandedId===log.id?"audit-row-selected":""}><td><span className="audit-mobile-label">Waktu / ID</span><time dateTime={log.occurredAt}>{formatUtc(log.occurredAt)}</time><span className="audit-secondary">#{log.id}</span></td><td><span className="audit-mobile-label">Tindakan</span><strong>{ACTION_LABELS[log.actionType] || log.actionType}</strong><code className="audit-secondary">{log.actionType}</code></td><td><span className="audit-mobile-label">Laporan</span><span className="audit-report-id">{log.reportId || "Tidak terkait laporan"}</span></td><td><span className="audit-mobile-label">Aktor</span><span>{log.actorType}</span><span className="audit-secondary">{log.actorId}</span></td><td><button type="button" className="audit-button audit-detail-toggle" aria-expanded={expandedId===log.id} aria-controls={`audit-detail-${log.id}`} onClick={()=>setExpandedId(expandedId===log.id?null:log.id)}>{expandedId===log.id?<ChevronUp size={15} aria-hidden="true" />:<ChevronDown size={15} aria-hidden="true" />}{expandedId===log.id?"Tutup detail":"Lihat detail"}</button></td></tr><tr className="audit-detail-row" hidden={expandedId!==log.id}><td colSpan={5}><section id={`audit-detail-${log.id}`} aria-label={`Detail entri ${log.id}`} className="audit-entry-detail"><h3>Perubahan pada entri #{log.id}</h3><div className="audit-snapshots"><div><h4>Sebelum</h4><pre>{snapshotText(log.snapshotBefore)}</pre></div><div><h4>Sesudah</h4><pre>{snapshotText(log.snapshotAfter)}</pre></div></div><dl className="audit-hashes"><div><dt>Hash entri sebelumnya</dt><dd><code>{log.prevEntryHash || "Tidak tersedia"}</code></dd></div><div><dt>Hash entri ini</dt><dd><code>{log.entryHash || "Tidak tersedia"}</code></dd></div></dl><p className="audit-helper">Nilai hash ditampilkan sebagaimana diterima dari server, bukan hasil verifikasi integritas.</p></section></td></tr></React.Fragment>)}</tbody></table>}
         {!loading && filteredLogs.length>0 && <nav className="audit-pagination" aria-label="Halaman riwayat audit"><span>Halaman {currentPage} dari {totalPages}</span><div><button type="button" className="audit-button" disabled={currentPage===1} onClick={()=>{setPage(currentPage-1);setExpandedId(null);}}>Sebelumnya</button><button type="button" className="audit-button" disabled={currentPage===totalPages} onClick={()=>{setPage(currentPage+1);setExpandedId(null);}}>Berikutnya</button></div></nav>}
       </section>
-      <section className="audit-tools" aria-labelledby="audit-tools-heading"><h2 id="audit-tools-heading">Peralatan audit</h2><div className="audit-tools-grid"><div><h3>Ekspor CSV / JSON</h3><p>Ekspor harus tercatat sebagai LOG_EXPORTED. Endpoint ekspor audit belum tersedia; tombol ini belum dapat digunakan.</p><button type="button" disabled className="audit-button" aria-describedby="audit-export-help"><Download size={16} aria-hidden="true" />Ekspor log</button><span id="audit-export-help" className="audit-helper">Menunggu endpoint ekspor dengan pencatatan audit.</span></div></div></section>
+      <section className="audit-tools" aria-labelledby="audit-tools-heading"><h2 id="audit-tools-heading">Ekspor riwayat audit</h2><p id="audit-export-help">Unduh {filteredLogs.length} entri hasil filter dari {logs.length} entri yang dimuat, termasuk semua halaman tabel. Ekspor menyertakan snapshot dan hash asli serta dicatat sebagai aktivitas audit. Arsip di luar data yang dimuat tidak termasuk.</p><div className="audit-export-actions" aria-busy={exporting !== null}>{(["csv", "json"] as const).map(format => <button key={format} type="button" className="audit-button" disabled={loading || exporting !== null || !filteredLogs.length} onClick={() => exportLogs(format)} aria-describedby="audit-export-help"><Download size={16} aria-hidden="true" />{exporting === format ? "Menyiapkan…" : `Unduh ${format.toUpperCase()}`}</button>)}</div>{exportError && <p role="alert">{exportError}</p>}<p role="status" className="audit-helper">{exportMessage}</p></section>
     </div></main>
   );
 }
