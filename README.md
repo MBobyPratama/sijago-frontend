@@ -4,7 +4,7 @@
 
 # SIJAGO - Sistem Jalan Bogor
 
-SIJAGO adalah website pelaporan kerusakan jalan di Kota Bogor yang membantu warga mengirim laporan, melihat lokasi kerusakan, dan memantau tindak lanjut perbaikan. Admin memverifikasi dan meneruskan laporan, sedangkan instansi memperbarui perkembangan penanganan melalui dashboard.
+SIJAGO adalah website pelaporan kerusakan jalan di Kota Bogor yang membantu warga mengirim laporan tanpa perlu membuat akun, melihat lokasi kerusakan di peta interaktif, dan memantau tindak lanjut perbaikan secara transparan. Admin memverifikasi, memeriksa potensi laporan duplikat, dan meneruskan laporan sesuai kewenangan ruas jalan, sedangkan instansi terkait memperbarui perkembangan penanganan melalui dashboard.
 
 ## Deployment
 
@@ -15,12 +15,14 @@ SIJAGO adalah website pelaporan kerusakan jalan di Kota Bogor yang membantu warg
 
 Untuk mencoba dashboard, buka [halaman login SIJAGO](https://sijago-frontend.vercel.app/login) dan gunakan akun dummy berikut:
 
-| Peran | Nama | Email | Kata sandi |
+| Peran | Nama / Instansi | Email | Kata sandi |
 | --- | --- | --- | --- |
 | Admin | Administrator SIJAGO | `admin@sijago.com` | `ADMINSIJAGO123` |
-| Instansi | Petugas PUPR Kota Bogor | `dpupr@kotabogor.go.id` | `PUPRKOTABOGOR123` |
+| Instansi (Jalan Kota) | Dinas PUPR Kota Bogor | `dpupr@kotabogor.go.id` | `PUPRKOTABOGOR123` |
+| Instansi (Jalan Provinsi) | Dinas Bina Marga dan Penataan Ruang (DBMPR) Provinsi Jawa Barat | `dbmpr@jabarprov.go.id` | `DBMPR123` |
+| Instansi (Jalan Nasional) | BBPJN DKI Jakarta–Jawa Barat | `bbpjn_jktjabar@pu.go.id` | `BBPJN123` |
 
-Akun admin digunakan untuk mencoba moderasi laporan, audit, dan pengaturan. Akun instansi digunakan untuk mencoba pengelolaan laporan yang ditugaskan ke Dinas PUPR Kota Bogor. Kedua akun merupakan akun demonstrasi; alamat instansi pada akun demo tidak menyatakan adanya kerja sama resmi.
+Akun admin digunakan untuk mencoba moderasi laporan, pemeriksaan duplikat, penerusan ke instansi, audit, dan pengaturan sistem. Ketiga akun instansi digunakan untuk mencoba pengelolaan laporan sesuai kewenangan ruas jalan masing-masing (Dinas PUPR Kota Bogor, DBMPR Provinsi Jawa Barat, dan BBPJN DKI Jakarta–Jawa Barat). Seluruh akun di atas merupakan akun demonstrasi; alamat instansi pada akun demo tidak menyatakan adanya kerja sama resmi.
 
 ## Tech Stack
 
@@ -31,6 +33,7 @@ Akun admin digunakan untuk mencoba moderasi laporan, audit, dan pengaturan. Akun
 | Grafik dan ikon | Recharts, Lucide React |
 | Backend | Node.js, Express.js, TypeScript |
 | Database | PostgreSQL di Neon, PostGIS, Drizzle ORM |
+| AI & Moderasi Visual | OpenAI (`omni-moderation-latest` & Vision/Text JSON Schema) |
 | Penyimpanan foto | Cloudinary |
 | Email | Resend |
 | Data cuaca | Open-Meteo dan BMKG |
@@ -66,20 +69,29 @@ Isi `.env` menggunakan konfigurasi Anda sendiri:
 - `DATABASE_URL`: connection string database Neon/PostgreSQL.
 - `PORT=4000` dan `FRONTEND_URL=http://localhost:3000` untuk pengembangan lokal.
 - `PSEUDONYM_HASH_SALT` dan nilai secret lain pada file contoh: ganti dengan nilai acak milik Anda.
+- `OPENAI_API_KEY`: digunakan untuk 4 fitur AI aktif (pemeriksaan keamanan & relevansi foto jalan, analisis saran isian dari foto, saran perbandingan duplikat laporan untuk admin, serta ringkasan pola antrean laporan untuk petugas instansi). Penyusunan draf laporan warga menggunakan template deterministik sehingga pengiriman laporan tetap berjalan meskipun AI dinonaktifkan.
 - `CLOUDINARY_*`: kredensial untuk mengunggah dan menampilkan foto laporan.
-- `RESEND_API_KEY` dan `RESEND_FROM_EMAIL`: untuk fitur email dan OTP. Pengiriman ke instansi juga membutuhkan alamat email resmi instansi yang sudah dikonfigurasi.
+- `RESEND_API_KEY` dan `RESEND_FROM_EMAIL`: untuk pengiriman tanda terima tiket, OTP pemulihan tiket, dan eskalasi email ke instansi.
 
-Jangan memasukkan file `.env` atau kredensial ke repository. Integrasi OpenAI tersedia pada backend, tetapi alur pelaporan warga saat ini memakai draf template dan tidak membutuhkan pembuatan laporan dengan AI.
+Jangan memasukkan file `.env` atau kredensial ke repository.
 
-Pada database yang akan digunakan, jalankan migrasi dan inisialisasi data master, kemudian mulai server:
+Pada database yang akan digunakan, jalankan migrasi, inisialisasi data master, serta seeding akun dan laporan contoh, kemudian mulai server:
 
 ```powershell
+# (Opsional) Reset database jika ingin mengosongkan seluruh data lama
+npm run db:reset
+
+# Migrasi skema & inisialisasi data master instansi
 npm run db:migrate
 npm run db:seed
+
+# Buat 4 akun demo (1 Admin + 3 Instansi) dan 11 laporan contoh (SJG-2026-4101 s.d. SJG-2026-4111)
+npm run db:seed:accounts
+npm run db:seed:reports
+
+# Jalankan server backend (http://localhost:4000/v1)
 npm run dev
 ```
-
-Seed hanya menyiapkan data master instansi, konfigurasi sistem, dan proteksi audit; tidak membuat laporan dummy maupun akun login bawaan. API berjalan pada `http://localhost:4000/v1`.
 
 ### 3. Install dan jalankan frontend
 
@@ -107,21 +119,25 @@ npm run dev
 
 Buka **http://localhost:3000**. Jika port tersebut sedang digunakan, Next.js dapat memilih port lain; periksa URL pada terminal dan sesuaikan konfigurasi URL frontend bila diperlukan.
 
-### 4. Buat akun admin atau instansi
+### 4. Seeding akun portal dan data laporan contoh
 
-Akun dibuat melalui SQL Editor Neon menggunakan [query pembuatan akun](sijago-backend/sql/create-portal-account.sql). Isi email, nama, kata sandi, dan peran pada variabel query; untuk petugas instansi, isi juga kode instansinya. Petunjuk tersedia di [panduan autentikasi](sijago-backend/sql/README-auth.md).
+Di folder `sijago-backend`, tersedia skrip seeding terpisah sesuai kebutuhan:
+
+- `npm run db:seed`: menyiapkan data master 3 instansi (PUPR Kota Bogor, DBMPR Jabar, BBPJN DKI Jakarta–Jawa Barat), konfigurasi sistem, dan proteksi trigger audit log.
+- `npm run db:seed:accounts`: membuat ke-4 akun demo (1 Admin + 3 Instansi) secara otomatis. Alternatif manual melalui SQL Editor Neon juga tersedia pada `sijago-backend/sql/create-portal-account.sql` dan `sijago-backend/sql/README-auth.md`.
+- `npm run db:seed:reports`: membuat **11 laporan contoh** dengan kode tiket asli (`SJG-2026-4101` s.d. `SJG-2026-4111`) menggunakan foto dari `public/images/example/`. Tiga laporan pertama (`SJG-2026-4101`, `SJG-2026-4102`, `SJG-2026-4103`) ditempatkan berdekatan (~12 meter di Jl. Ir. H. Juanda / Pintu 1 Kebun Raya Bogor) untuk menguji fitur deteksi laporan sekitar dan penggabungan duplikat.
 
 Setelah akun dibuat, buka `/login` atau gunakan tautan **Masuk admin & instansi** di footer. Dashboard dilindungi autentikasi dan akses berbasis peran.
 
 ## Progress Saat Ini
 
-- **Halaman warga:** homepage dengan hero, peta laporan, filter pencarian, FAQ, dan footer.
-- **Pelaporan:** unggah foto, pilih lokasi dengan klik peta atau geser pin, isi data kerusakan, lalu tinjau dan kirim menggunakan draf template.
-- **Pelacakan dan detail:** pencarian kode tiket, status penanganan, foto bukti, dukungan warga, Community Sign-Off, serta cetak lembar laporan ke PDF melalui browser.
-- **Dashboard admin:** moderasi, verifikasi dan pembatalannya dengan alasan, penolakan, penggabungan laporan duplikat, penerusan ke instansi, audit, dan pengaturan sistem.
-- **Dashboard instansi:** daftar laporan sesuai instansi, pembaruan status penanganan, unggah bukti perbaikan, pengembalian laporan ke admin, dan Weather-Road Intelligence.
-- **Autentikasi:** login, logout, sesi server, proteksi API/dashboard, serta pembatasan akses laporan berdasarkan instansi.
-- **Antarmuka:** layout responsif, tema Klasik/Biru/Gelap, maskot SIJAGO, dan preview foto di dalam website.
+- **Halaman warga:** homepage dengan hero, peta laporan interaktif (MapLibre GL JS), filter pencarian, statistik ringkas, FAQ, dan footer.
+- **Pelaporan warga (tanpa login):** unggah foto dengan pemeriksaan keamanan & relevansi jalan otomatis (**AI Photo Safety & Road Relevance Gate**), fitur **Saran Isian dari Foto (AI Damage Photo Analysis)** untuk membantu mengisi kategori, kelas ukuran, dan deskripsi kondisi awal, deteksi laporan berdekatan (radius PostGIS) dengan opsi mendukung (*upvote*) laporan yang sudah ada, pemilihan lokasi via GPS atau pin peta, serta pengiriman laporan dengan draf template deterministik.
+- **Pelacakan, pemulihan tiket, dan detail:** pencarian kode tiket (`SJG-2026-XXXX`), pemulihan kode tiket melalui OTP email bagi pelapor yang mencantumkan email, kronologi status penanganan, foto bukti sebelum/sesudah perbaikan, dukungan warga (*upvote*), *condition tags* terverifikasi email, *Community Sign-Off* (masa pemantauan 30 hari pasca-perbaikan), serta cetak lembar laporan resmi ke PDF melalui browser.
+- **Dashboard admin:** moderasi antrean berpaginasi, verifikasi dan pembatalan verifikasi dengan alasan, penolakan laporan, fitur **Saran Duplikat AI (AI Duplicate Report Comparison)** untuk membandingkan bukti visual & jarak kandidat laporan dalam radius 100 meter sebelum penggabungan tiket (*merge*), penerusan laporan ke instansi sesuai kewenangan ruas jalan (Kota, Provinsi, Nasional), log audit berantai (*tamper-evident*), dan pengaturan sistem.
+- **Dashboard instansi:** daftar laporan sesuai kewenangan masing-masing instansi, fitur **Ringkasan Pola Antrean AI (AI Agency Queue Pattern Summarizer)** untuk merangkum pola keluhan warga lintas laporan beserta sitasi tiket sumber, pembaruan status penanganan (`DIPROSES` / `SELESAI`), unggah bukti perbaikan (*after photo*), pengembalian laporan salah kewenangan ke admin, dan *Weather-Road Intelligence*.
+- **Autentikasi & keamanan:** login, logout, sesi server PostgreSQL dengan cookie `HttpOnly`, proteksi API/dashboard berbasis peran, pembatasan cakupan akses laporan per instansi, perlindungan anti-bot Cloudflare Turnstile, serta proteksi *audit log* dengan rantai hash SHA-256.
+- **Antarmuka & panduan desain:** layout responsif, tema **Klasik, Biru, dan Gelap**, maskot SIJAGO, pratinjau foto di dalam website, serta halaman acuan desain lengkap **Theme Guide** (`/theme-guide` dan `/admin/theme-guide`).
 
 Project masih dalam pengembangan untuk **MIA2026**. Skor prioritas saat ini menggunakan kelas ukuran kerusakan dan dukungan warga; perhitungan berbobot berdasarkan kategori, dampak, umur laporan, dan curah hujan belum diterapkan sepenuhnya. Kerja sama serta tindak lanjut instansi dalam konteks kompetisi masih merupakan simulasi, dan fitur layanan eksternal memerlukan konfigurasi yang valid.
 
