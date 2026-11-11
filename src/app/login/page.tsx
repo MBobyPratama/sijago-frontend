@@ -67,6 +67,13 @@ export default function LoginPage() {
   return <main className="login-page">
     <div className="login-layout">
       <aside className="login-brand-panel" aria-label="SIJAGO">
+        <Image
+          src="/images/login_background.avif"
+          alt=""
+          fill
+          sizes="(max-width: 680px) 100vw, 45vw"
+          className="login-brand-bg"
+        />
         <Link href="/" className="login-logo" aria-label="SIJAGO, beranda"><Image src="/images/logo_header.svg" alt="SIJAGO, Sistem Jalan Bogor" width={380} height={132} priority /></Link>
         <div className="login-brand-content">
           <Image src="/images/sijago_pose_menyapa.svg" alt="" width={462} height={445} className="login-mascot" />

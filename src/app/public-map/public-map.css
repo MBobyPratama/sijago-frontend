@@ -143,7 +143,8 @@
 
 /* Full-width photographic introduction, aligned to the map container. */
 .public-map { padding-top: 0; }
-.pm-image-hero { position: relative; isolation: isolate; display: flex; align-items: center; min-height: 520px; background: var(--color-ink) url("/images/hero_background.avif") center 54% / cover no-repeat; color: var(--color-accent-ink); }
+.pm-image-hero { position: relative; isolation: isolate; overflow: clip; display: flex; align-items: center; min-height: 520px; background: var(--color-ink); color: var(--color-accent-ink); }
+.pm-hero-bg { object-fit: cover; object-position: center 54%; z-index: -2; pointer-events: none; user-select: none; }
 .pm-image-hero::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgb(8 23 38 / 92%) 0%, rgb(8 23 38 / 78%) 45%, rgb(8 23 38 / 22%) 100%); }
 .pm-image-hero > .pm-container { width: 100%; }
 .pm-hero-content { max-width: 660px; padding-block: var(--space-2xl); text-align: left; }
@@ -155,7 +156,8 @@
 .pm-image-hero :focus-visible { outline-color: var(--color-accent-ink); }
 .pm-map-content { padding-top: var(--space-xl); scroll-margin-top: var(--space-lg); }
 @media (max-width: 760px) {
-  .pm-image-hero { min-height: 460px; background-position: 62% center; }
+  .pm-image-hero { min-height: 460px; }
+  .pm-hero-bg { object-position: 62% center; }
   .pm-image-hero::before { background: rgb(8 23 38 / 78%); }
   .pm-hero-content { padding-block: var(--space-xl); }
   .pm-hero-content p { font-size: var(--text-md); }
