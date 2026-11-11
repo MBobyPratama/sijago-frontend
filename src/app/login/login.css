@@ -67,7 +67,9 @@ html, body { overflow-x: clip; }
   --login-photo-overlay-end: #123e70b8;
   --login-photo-ink: #f2f7ff;
 }
-.login-brand-panel { background: linear-gradient(135deg, var(--login-photo-overlay-start), var(--login-photo-overlay-end)), url("/images/login_background.avif") center / cover no-repeat; color: var(--login-photo-ink); }
+.login-brand-panel { position: relative; isolation: isolate; overflow: clip; background: var(--login-photo-overlay-start); color: var(--login-photo-ink); }
+.login-brand-bg { object-fit: cover; object-position: center; z-index: -2; pointer-events: none; user-select: none; }
+.login-brand-panel::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(135deg, var(--login-photo-overlay-start), var(--login-photo-overlay-end)); }
 .login-brand-panel .login-logo { padding: var(--space-sm); border-radius: var(--radius-control); background: var(--color-paper-3); }
 .login-brand-content p, .login-brand-panel .login-back { color: var(--login-photo-ink); }
 .login-brand-panel :is(a,button):focus-visible { outline-color: var(--login-photo-ink); }
